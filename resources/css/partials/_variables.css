@@ -1,0 +1,42 @@
+/**
+ * Design tokens — SPKN BPK RI
+ * Palet mengikuti referensi desain: dasar navy gedung BPK, aksen indigo/violet
+ * untuk elemen interaktif, dan gold sebagai aksen penekanan (mis. kata "(SPKN)").
+ */
+
+:root {
+  /* --- Warna dasar --- */
+  --spkn-navy-950: #0b1229;
+  --spkn-navy-800: #0f1b3d;
+  --spkn-ink: #1e2340;
+  --spkn-ink-muted: #4b5170;
+
+  /* --- Aksen indigo/violet (tombol aktif, hover, CTA) --- */
+  --spkn-indigo-500: #6d5bf5;
+  --spkn-indigo-600: #5b46f0;
+  --spkn-violet-400: #8b7cf6;
+  --spkn-indigo-tint: rgba(109, 91, 245, 0.12);
+
+  /* --- Aksen gold (penekanan pada hero & stat) --- */
+  --spkn-gold-400: #f7c948;
+  --spkn-gold-500: #f5b731;
+
+  /* --- Liquid glass --- */
+  --glass-bg: rgba(255, 255, 255, 0.55);
+  --glass-bg-strong: rgba(255, 255, 255, 0.72);
+  --glass-bg-dark: rgba(15, 23, 61, 0.45);
+  --glass-border: rgba(255, 255, 255, 0.45);
+  --glass-border-dark: rgba(255, 255, 255, 0.18);
+  --glass-blur: 20px;
+  --glass-blur-strong: 28px;
+  --glass-shadow: 0 8px 32px rgba(15, 27, 61, 0.14);
+
+  /* --- Radius & spacing --- */
+  --radius-pill: 999px;
+  --radius-lg: 20px;
+  --radius-md: 14px;
+
+  /* --- Tipografi --- */
+  --font-display: "Sora", "Segoe UI", sans-serif;
+  --font-body: "Inter", "Segoe UI", sans-serif;
+}

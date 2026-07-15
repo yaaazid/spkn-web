@@ -1,9 +1,9 @@
-@import 'tailwindcss';
+/* Import Bootstrap dulu (base), baru token & komponen custom kita di atasnya.
+   Urutan ini penting: variabel & override kita harus menang atas default Bootstrap. */
+@import "bootstrap/dist/css/bootstrap.min.css";
+@import "bootstrap-icons/font/bootstrap-icons.css";
 
-@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
-@source '../../storage/framework/views/*.php';
-
-@theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
-}
+@import "./partials/_variables.css";
+@import "./partials/_glass.css";
+@import "./partials/_navbar.css";
+@import "./partials/_hero.css";
