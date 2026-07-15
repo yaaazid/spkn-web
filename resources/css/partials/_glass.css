@@ -28,16 +28,33 @@
 }
 
 .glass-pill {
-  background: var(--glass-bg-strong);
-  border: 1px solid var(--glass-border);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.78), rgba(255, 255, 255, 0.5));
+  border: 1px solid rgba(255, 255, 255, 0.5);
   border-radius: var(--radius-pill);
-  backdrop-filter: blur(var(--glass-blur)) saturate(180%);
-  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+  backdrop-filter: blur(32px) saturate(200%) brightness(1.05);
+  -webkit-backdrop-filter: blur(32px) saturate(200%) brightness(1.05);
   box-shadow:
-    var(--glass-shadow),
-    inset 0 1px 0 rgba(255, 255, 255, 0.65);
+    0 14px 44px rgba(15, 27, 61, 0.2),
+    0 2px 8px rgba(15, 27, 61, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.75),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.15);
   position: relative;
   overflow: hidden;
+}
+
+/* Highlight tipis di tepi (terang di atas, memudar ke bawah) — efek
+   pantulan cahaya khas material kaca iOS, bukan cuma border polos rata. */
+.glass-pill::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0) 45%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
 }
 
 /* Lapisan "sheen" tipis yang bergerak pelan — kesan cairan/liquid,

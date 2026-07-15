@@ -1,5 +1,13 @@
 /**
  * Navbar — SPKN BPK RI
+ *
+ * Perilaku scroll (meniru atescape.id):
+ * - Di landing (belum discroll): navbar diam, full-width, transparan
+ *   (tanpa panel kaca), teks putih supaya kebaca di atas foto hero, semua
+ *   menu tampil penuh.
+ * - Begitu discroll (class .is-scrolled ditambah JS, lihat navbar-scroll.js):
+ *   navbar mengecil jadi pill kaca mengambang, nav-list & search disembunyikan,
+ *   diganti tombol "Menu" yang membuka panel nav-list saat diklik.
  */
 
 .spkn-navbar-wrap {
@@ -13,16 +21,30 @@
   position: relative;
   max-width: 1440px; /* lebih lebar, pas buat rasio laptop biasa */
   margin: 0 auto;
+  transition: max-width .25s ease;
+}
+
+/* Saat discroll, pill-nya mengecil ngikutin isi (logo + tombol Menu),
+   bukan tetap melebar penuh kayak navbar landing */
+.spkn-navbar-wrap.is-scrolled .spkn-navbar {
+  max-width: fit-content;
 }
 
 /* Lapisan visual kaca (background blur + sheen) — TERPISAH dari konten.
-   overflow:hidden di sini cuma mengunci bentuk pill si sheen, tidak lagi
-   memotong dropdown karena dropdown bukan anak dari elemen ini. */
+   Di landing tetap kelihatan (opacity medium, ~55%) supaya border/efek
+   liquid glass-nya tetap terasa, bukan transparan total. Begitu discroll,
+   opacity naik penuh + pill-nya mengecil (lihat .is-scrolled di bawah). */
 .spkn-navbar__chrome {
   position: absolute;
   inset: 0;
   z-index: 0;
   pointer-events: none;
+  opacity: 0.55;
+  transition: opacity .25s ease;
+}
+
+.spkn-navbar-wrap.is-scrolled .spkn-navbar__chrome {
+  opacity: 1;
 }
 
 .spkn-navbar__content {
@@ -32,7 +54,13 @@
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding: 10px 12px 10px 16px;
+  padding: 14px 12px 14px 16px;
+  transition: padding .25s ease;
+}
+
+.spkn-navbar-wrap.is-scrolled .spkn-navbar__content {
+  padding: 10px 20px 10px 14px; /* lega di kanan-kiri, tapi pill-nya sendiri sudah fit-content jadi tetap ringkas */
+  gap: 28px;
 }
 
 /* --- Brand --- */
@@ -41,7 +69,12 @@
   align-items: center;
   gap: 10px;
   text-decoration: none;
-  color: var(--spkn-ink);
+  color: #fff; /* putih di landing, di atas foto hero */
+  transition: color .25s ease;
+}
+
+.spkn-navbar-wrap.is-scrolled .spkn-brand {
+  color: var(--spkn-ink); /* balik gelap begitu ada latar kaca terang */
 }
 
 .spkn-brand__mark {
@@ -54,6 +87,7 @@
   box-shadow: var(--glass-shadow);
   font: 700 11px var(--font-display);
   color: var(--spkn-indigo-600);
+  flex: none;
 }
 
 .spkn-brand__name {
@@ -82,7 +116,7 @@
   font-family: var(--font-body);
   font-weight: 600;
   font-size: 14.5px;
-  color: var(--spkn-ink);
+  color: #fff; /* putih di landing */
   text-decoration: none;
   background: transparent;
   border: none;
@@ -90,7 +124,15 @@
   transition: background-color .18s ease, color .18s ease;
 }
 
+.spkn-navbar-wrap.is-scrolled .spkn-nav-link {
+  color: var(--spkn-ink);
+}
+
 .spkn-nav-link:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.spkn-navbar-wrap.is-scrolled .spkn-nav-link:hover {
   background: var(--spkn-indigo-tint);
 }
 
@@ -114,7 +156,7 @@
   transform: rotate(180deg);
 }
 
-/* --- Actions (search + login) --- */
+/* --- Actions (search) --- */
 .spkn-nav-actions {
   display: flex;
   align-items: center;
@@ -127,25 +169,80 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.7);
-  border: 1px solid var(--glass-border);
-  color: var(--spkn-ink);
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: #fff;
   cursor: pointer;
+  transition: background-color .25s ease, border-color .25s ease, color .25s ease;
 }
 
-.spkn-btn-login {
-  display: inline-flex;
+.spkn-navbar-wrap.is-scrolled .spkn-icon-btn {
+  background: rgba(255, 255, 255, 0.7);
+  border-color: var(--glass-border);
+  color: var(--spkn-ink);
+}
+
+/* --- Tombol "Menu" — muncul saat navbar dalam mode ramping
+       (di-scroll di desktop, ATAU selalu di mobile) --- */
+.spkn-menu-toggle {
+  display: none;
   align-items: center;
   gap: 8px;
-  padding: 10px 18px;
+  padding: 9px 16px 9px 18px;
   border-radius: var(--radius-pill);
-  background: linear-gradient(135deg, var(--spkn-indigo-500), var(--spkn-violet-400));
+  border: none;
+  background: transparent;
   color: #fff;
   font-family: var(--font-body);
   font-weight: 600;
-  font-size: 14.5px;
-  text-decoration: none;
-  box-shadow: 0 6px 18px rgba(109, 91, 245, 0.35);
+  font-size: 14px;
+  cursor: pointer;
+  transition: color .25s ease, background-color .18s ease;
+}
+
+.spkn-navbar-wrap.is-scrolled .spkn-menu-toggle {
+  color: var(--spkn-ink);
+}
+
+.spkn-menu-toggle:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.spkn-navbar-wrap.is-scrolled .spkn-menu-toggle:hover {
+  background: var(--spkn-indigo-tint);
+}
+
+.spkn-navbar-wrap.is-scrolled .spkn-menu-toggle,
+.spkn-navbar.is-menu-open .spkn-menu-toggle {
+  display: inline-flex;
+}
+
+/* Sembunyikan nav-list & search saat mode ramping, digantikan tombol Menu */
+.spkn-navbar-wrap.is-scrolled .spkn-nav-list,
+.spkn-navbar-wrap.is-scrolled .spkn-nav-actions {
+  display: none;
+}
+
+/* --- Panel nav-list saat tombol "Menu" diklik (mode ramping/mobile) ---
+   Nav-list yang sama dipakai ulang, cuma disusun ulang jadi panel vertikal
+   lewat class .is-menu-open di JS (navbar-scroll.js) */
+.spkn-navbar.is-menu-open .spkn-nav-list {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 4px;
+  position: absolute;
+  top: calc(100% + 12px);
+  left: 0;
+  right: 0;
+  padding: 12px;
+  z-index: 5;
+}
+
+.spkn-navbar.is-menu-open .spkn-nav-list .spkn-nav-link {
+  color: var(--spkn-ink);
+  justify-content: space-between;
+  width: 100%;
 }
 
 /* --- Dropdown (mega menu) --- */
@@ -280,11 +377,11 @@
   color: var(--spkn-indigo-500);
 }
 
-/* --- Mobile: sembunyikan nav list, tampilkan tombol burger --- */
-.spkn-nav-toggle { display: none; }
-
+/* --- Mobile: selalu mode ramping (sama seperti .is-scrolled di desktop) --- */
 @media (max-width: 991.98px) {
   .spkn-nav-list,
-  .spkn-nav-actions .spkn-btn-login-label { display: none; }
-  .spkn-nav-toggle { display: grid; }
+  .spkn-nav-actions { display: none; }
+  .spkn-menu-toggle { display: inline-flex; color: #fff; }
+  .spkn-navbar-wrap.is-scrolled .spkn-menu-toggle { color: var(--spkn-ink); }
+  .spkn-navbar.is-menu-open .spkn-nav-list { display: flex; }
 }

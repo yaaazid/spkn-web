@@ -15,10 +15,10 @@
         <div class="spkn-navbar__content">
             <a href="{{ route('home') }}" class="spkn-brand">
                 <span class="spkn-brand__mark">SPKN</span>
-                <span class="spkn-brand__name">Komite SPKN</span>
+                <span class="spkn-brand__name">Komite SPKN<br>BPK RI</span>
             </a>
 
-            <ul class="spkn-nav-list">
+            <ul class="spkn-nav-list" data-nav-list>
                 @foreach (config('navigation.primary') as $item)
                     @if ($item['type'] === 'link')
                         <li>
@@ -50,7 +50,10 @@
 
             @include('partials.navbar.nav-actions')
 
-            <button type="button" class="spkn-nav-toggle spkn-icon-btn" aria-label="Buka menu">
+            {{-- Tombol "Menu" — muncul saat navbar mode ramping (di-scroll di desktop,
+                 atau selalu di mobile). Klik membuka spkn-nav-list di atas sebagai panel. --}}
+            <button type="button" class="spkn-menu-toggle" data-menu-toggle aria-label="Buka menu" aria-expanded="false">
+                <span>Menu</span>
                 <i class="bi bi-list" aria-hidden="true"></i>
             </button>
         </div>
