@@ -48,8 +48,6 @@
                 @endforeach
             </ul>
 
-            @include('partials.navbar.nav-actions')
-
             {{-- Tombol "Menu" — muncul saat navbar mode ramping (di-scroll di desktop,
                  atau selalu di mobile). Klik membuka spkn-nav-list di atas sebagai panel. --}}
             <button type="button" class="spkn-menu-toggle" data-menu-toggle aria-label="Buka menu" aria-expanded="false">

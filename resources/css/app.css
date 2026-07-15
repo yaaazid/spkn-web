@@ -7,3 +7,5 @@
 @import "./partials/_glass.css";
 @import "./partials/_navbar.css";
 @import "./partials/_hero.css";
+
+html::-webkit-scrollbar{display:none}

@@ -152,6 +152,18 @@
   list-style: none;
   margin: 0;
   padding: 0;
+  transition: opacity .14s ease;
+}
+
+/* Ditambahkan JS (navbar-scroll.js) sesaat SEBELUM konten ditukar (nav-list/
+   search <-> tombol Menu) waktu status scroll berubah, supaya konten lama
+   fade-out dulu baru pill-nya di-resize — bukan langsung "kedip" hilang
+   bareng resize seperti sebelumnya. Dipasang juga sesaat ke konten baru
+   sebelum tampil, lalu dilepas 2 frame kemudian supaya fade-in kelihatan. */
+.spkn-nav-list.is-crossfade-out,
+.spkn-nav-actions.is-crossfade-out,
+.spkn-menu-toggle.is-crossfade-out {
+  opacity: 0;
 }
 
 .spkn-nav-link {
@@ -208,6 +220,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  transition: opacity .14s ease;
 }
 
 .spkn-icon-btn {
@@ -244,7 +257,7 @@
   font-weight: 600;
   font-size: 14px;
   cursor: pointer;
-  transition: color .25s ease, background-color .18s ease;
+  transition: color .25s ease, background-color .18s ease, opacity .14s ease;
 }
 
 .spkn-navbar-wrap.is-scrolled .spkn-menu-toggle {
