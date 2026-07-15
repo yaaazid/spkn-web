@@ -15,7 +15,7 @@
         <div class="spkn-navbar__content">
             <a href="{{ route('home') }}" class="spkn-brand">
                 <span class="spkn-brand__mark">SPKN</span>
-                <span class="spkn-brand__name">Komite SPKN<br>BPK RI</span>
+                <span class="spkn-brand__name">Komite SPKN</span>
             </a>
 
             <ul class="spkn-nav-list" data-nav-list>
