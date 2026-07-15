@@ -4,12 +4,14 @@
 
 .spkn-hero {
   position: relative;
-  min-height: 720px;
+  min-height: 100vh; /* full 1 layar penuh — foto baru rasionya 2560x1156 (≈2.2:1),
+                        cukup dekat ke rasio layar biasa jadi aman dipakai penuh 100vh */
   display: flex;
-  align-items: flex-end;
-  padding: 100px 20px 64px;
+  flex-direction: column; /* navbar di atas, hero__inner di bawah — bukan sejajar ke samping */
+  padding: 24px 20px 64px;
   background-size: cover;
-  background-position: center;
+  background-position: center; /* rasio foto baru lebih dekat ke rasio layar, tidak perlu bias vertikal lagi */
+  background-color: #3f444c; /* senada warna abu latar foto, jaga-jaga kalau ada sisi yang belum ke-cover */
   isolation: isolate;
 }
 
@@ -27,9 +29,11 @@
 }
 
 .spkn-hero__inner {
-  max-width: 1280px;
-  margin: 0 auto;
+  max-width: 1440px; /* lebih lebar, pas buat rasio laptop biasa */
   width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: auto; /* dorong ke bawah kolom, navbar tetap nempel di atas */
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
@@ -95,64 +99,47 @@
   -webkit-backdrop-filter: blur(10px);
 }
 
-/* --- Stat card kaca gelap, mengambang di kanan bawah hero --- */
+/* --- 3 kotak statistik: 2 di atas berdampingan, 1 di bawah full-width ---
+   Kotak atas: 160x80 (rasio 2:1). Kotak bawah: melebar 2 kolom (334px)
+   tapi TINGGI TETAP SAMA (80px) — tidak ikut membesar seperti aspect-ratio. */
 .spkn-stats {
-  width: 260px;
-  padding: 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  width: 334px;
 }
 
 .spkn-stats__item {
+  height: 80px; /* tinggi tetap untuk semua kotak, termasuk yang di baris ke-2 */
   display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 10px 4px;
+  flex-direction: column;
+  justify-content: center;
+  padding: 16px 20px;
 }
 
-.spkn-stats__icon {
-  flex: none;
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  background: linear-gradient(135deg, var(--spkn-indigo-500), var(--spkn-violet-400));
-  color: #fff;
+/* Kotak ke-3 (7/8) turun ke baris kedua dan melebar penuh 2 kolom,
+   tanpa ikut menambah tinggi */
+.spkn-stats__item:nth-child(3) {
+  grid-column: 1 / -1;
 }
 
 .spkn-stats__value {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 20px;
-  line-height: 1.2;
+  font-size: 28px;
+  line-height: 1.15;
+  color: #fff;
 }
 
 .spkn-stats__label {
   font-family: var(--font-body);
-  font-size: 12.5px;
+  font-size: 13px;
   color: rgba(255, 255, 255, 0.75);
-}
-
-.spkn-stats__divider {
-  height: 1px;
-  background: rgba(255, 255, 255, 0.15);
-  margin: 4px 0;
-}
-
-.spkn-stats__link {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 4px;
-  color: #fff;
-  font-size: 13.5px;
-  font-weight: 600;
-  text-decoration: none;
+  margin-top: 4px;
 }
 
 @media (max-width: 991.98px) {
   .spkn-hero__inner { flex-direction: column; align-items: flex-start; }
-  .spkn-stats { width: 100%; }
+  .spkn-stats { width: 100%; grid-template-columns: 1fr; }
+  .spkn-stats__item:nth-child(3) { grid-column: auto; }
 }

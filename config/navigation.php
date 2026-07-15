@@ -39,13 +39,18 @@ return [
                             'route' => 'about.history',
                         ],
                         [
-                            'label' => 'Struktur Komite SPKN',
-                            'route' => 'about.structure',
+                            'label'    => 'Struktur Komite SPKN',
+                            'route'    => 'about.structure',
+                            'children' => 'committee_structure', // merujuk ke key di bawah
                         ],
                         [
                             'label'    => 'Struktur Tim Teknis',
                             'route'    => 'about.technical-team',
                             'children' => 'technical_teams', // merujuk ke key di bawah
+                        ],
+                        [
+                            'label' => 'Tugas',
+                            'route' => 'about.tasks',
                         ],
                     ],
                 ],
@@ -101,6 +106,15 @@ return [
             'route' => 'agenda.index',
             'type'  => 'link',
         ],
+    ],
+
+    /**
+     * Submenu flyout tingkat dua untuk "Struktur Komite SPKN".
+     */
+    'committee_structure' => [
+        ['label' => 'Dewan Konsultatif', 'route' => 'committee-structure.show', 'param' => 'dewan-konsultatif'],
+        ['label' => 'Panitia Kerja',      'route' => 'committee-structure.show', 'param' => 'panitia-kerja'],
+        ['label' => 'Sekretariat SPKN',   'route' => 'committee-structure.show', 'param' => 'sekretariat-spkn'],
     ],
 
     /**

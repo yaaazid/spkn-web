@@ -1,35 +1,26 @@
 {{--
+    3 kotak statistik sejajar, masing-masing rasio 2:1 (lebar:tinggi).
     $stats disuplai dari controller, contoh:
     $stats = [
-        ['icon' => 'bi-people-fill', 'value' => '1.500+', 'label' => 'Pengunjung Bulan Ini'],
-        ['icon' => 'bi-file-earmark-text-fill', 'value' => '120+', 'label' => 'Dokumen SPKN'],
+        ['value' => '2017', 'label' => 'Sejak dibentuk'],
+        ['value' => '4', 'label' => 'Unsur komite'],
+        ['value' => '7/8', 'label' => 'Tahap proses baku'],
     ];
     Fallback di bawah dipakai kalau variabel belum dikirim (mis. saat development awal).
 --}}
 @php
     $stats ??= [
-        ['icon' => 'bi-people-fill', 'value' => '1.500+', 'label' => 'Pengunjung Bulan Ini'],
-        ['icon' => 'bi-file-earmark-text-fill', 'value' => '120+', 'label' => 'Dokumen SPKN'],
+        ['value' => '2017', 'label' => 'Sejak dibentuk'],
+        ['value' => '4', 'label' => 'Unsur komite'],
+        ['value' => '7/8', 'label' => 'Tahap proses baku'],
     ];
 @endphp
 
-<div class="spkn-stats glass-panel glass-panel--dark">
+<div class="spkn-stats">
     @foreach ($stats as $stat)
-        <div class="spkn-stats__item">
-            <span class="spkn-stats__icon">
-                <i class="bi {{ $stat['icon'] }}" aria-hidden="true"></i>
-            </span>
-            <div>
-                <div class="spkn-stats__value">{{ $stat['value'] }}</div>
-                <div class="spkn-stats__label">{{ $stat['label'] }}</div>
-            </div>
+        <div class="spkn-stats__item glass-panel glass-panel--dark">
+            <div class="spkn-stats__value">{{ $stat['value'] }}</div>
+            <div class="spkn-stats__label">{{ $stat['label'] }}</div>
         </div>
     @endforeach
-
-    <div class="spkn-stats__divider"></div>
-
-    <a href="{{ route('stats.index') ?? '#' }}" class="spkn-stats__link">
-        Lihat Statistik
-        <i class="bi bi-arrow-right" aria-hidden="true"></i>
-    </a>
 </div>

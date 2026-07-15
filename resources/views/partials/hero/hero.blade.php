@@ -1,6 +1,6 @@
 <header
     class="spkn-hero"
-    style="background-image: url('{{ asset('assets/images/hero-bpk.jpg') }}');"
+    style="background-image: url('{{ asset('assets/images/pemimpin.png') }}');"
 >
     @include('partials.navbar.navbar')
 

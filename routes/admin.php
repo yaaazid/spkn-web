@@ -1,44 +1,29 @@
 <?php
 
-use App\Http\Controllers\Front\HomeController;
+use App\Http\Controllers\Admin\AgendaController;
+use App\Http\Controllers\Admin\CommitteeMemberController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\DocumentController;
+use App\Http\Controllers\Admin\ForumController;
+use App\Http\Controllers\Admin\MenuController;
+use App\Http\Controllers\Admin\RevisionController;
+use App\Http\Controllers\Admin\SiteStatController;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Route publik
-|--------------------------------------------------------------------------
-| Nama-nama route di bawah ini SENGAJA disamakan dengan field 'route' di
-| config/navigation.php. Kalau nambah menu baru di navbar, tambahkan juga
-| route-nya di sini (atau di file fitur terpisah, lihat pola di bawah).
-*/
+// Situs ini informatif, tanpa sistem login/autentikasi. Panel admin diakses
+// langsung lewat /admin — tidak diproteksi middleware apa pun untuk saat ini.
+// Kalau nanti perlu dibatasi (mis. cuma tim internal), tinggal tambahkan lagi
+// ->middleware([...]) di sini setelah sistem auth-nya siap.
+Route::prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+        Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
-Route::get('/', [HomeController::class, 'index'])->name('home');
-
-// --- Tentang Kami ---
-Route::get('/tentang/sejarah', fn () => view('committee.history'))->name('about.history');
-Route::get('/tentang/struktur-komite', fn () => view('committee.structure'))->name('about.structure');
-Route::get('/tentang/struktur-tim-teknis', fn () => view('committee.technical-team'))->name('about.technical-team');
-Route::get('/tentang/tim-teknis/{param}', fn ($param) => view('committee.technical-team-show', compact('param')))->name('technical-team.show');
-
-// --- Proses Baku ---
-Route::get('/proses/tahapan', fn () => view('revisions.stages'))->name('process.stages');
-Route::get('/proses/konsultasi-publik', fn () => view('revisions.public-consultation'))->name('process.public-consultation');
-Route::get('/proses/pengesahan', fn () => view('revisions.ratification'))->name('process.ratification');
-
-// --- Produk dan Referensi ---
-Route::get('/produk', fn () => view('documents.index'))->name('products.index');
-Route::get('/produk/ifpp', fn () => view('documents.ifpp'))->name('products.ifpp');
-Route::get('/produk/isa', fn () => view('documents.isa'))->name('products.isa');
-Route::get('/produk/spap', fn () => view('documents.spap'))->name('products.spap');
-Route::get('/produk/standar-audit-lain', fn () => view('documents.other-audit'))->name('products.other-audit');
-Route::get('/produk/standar-penugasan-lain', fn () => view('documents.other-assignment'))->name('products.other-assignment');
-Route::get('/perpustakaan', fn () => view('documents.library'))->name('library.index');
-
-// --- Menu utama lainnya ---
-Route::get('/berita', fn () => view('home.news'))->name('news.index');
-Route::get('/forum', fn () => view('forum.index'))->name('forum.index');
-Route::get('/agenda', fn () => view('agenda.index'))->name('agenda.index');
-Route::get('/statistik', fn () => view('home.stats'))->name('stats.index');
-
-require __DIR__.'/auth.php';   // login/register (kalau pakai starter kit Breeze/Jetstream)
-require __DIR__.'/admin.php';  // route panel admin, terpisah & pakai middleware sendiri
+        Route::resource('menu', MenuController::class);
+        Route::resource('anggota-komite', CommitteeMemberController::class);
+        Route::resource('dokumen', DocumentController::class);
+        Route::resource('forum', ForumController::class);
+        Route::resource('agenda', AgendaController::class);
+        Route::resource('revisi-spkn', RevisionController::class);
+        Route::resource('statistik', SiteStatController::class)->only(['index', 'edit', 'update']);
+    });

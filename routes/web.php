@@ -17,8 +17,10 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 // --- Tentang Kami ---
 Route::get('/tentang/sejarah', fn () => view('committee.history'))->name('about.history');
 Route::get('/tentang/struktur-komite', fn () => view('committee.structure'))->name('about.structure');
+Route::get('/tentang/struktur-komite/{param}', fn ($param) => view('committee.structure-show', compact('param')))->name('committee-structure.show');
 Route::get('/tentang/struktur-tim-teknis', fn () => view('committee.technical-team'))->name('about.technical-team');
 Route::get('/tentang/tim-teknis/{param}', fn ($param) => view('committee.technical-team-show', compact('param')))->name('technical-team.show');
+Route::get('/tentang/tugas', fn () => view('committee.tasks'))->name('about.tasks');
 
 // --- Proses Baku ---
 Route::get('/proses/tahapan', fn () => view('revisions.stages'))->name('process.stages');
@@ -40,5 +42,4 @@ Route::get('/forum', fn () => view('forum.index'))->name('forum.index');
 Route::get('/agenda', fn () => view('agenda.index'))->name('agenda.index');
 Route::get('/statistik', fn () => view('home.stats'))->name('stats.index');
 
-require __DIR__.'/auth.php';   // login/register (kalau pakai starter kit Breeze/Jetstream)
-require __DIR__.'/admin.php';  // route panel admin, terpisah & pakai middleware sendiri
+require __DIR__.'/admin.php';  // route panel admin, terpisah dari route publik di atas
