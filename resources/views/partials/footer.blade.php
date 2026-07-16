@@ -14,6 +14,7 @@
                 'Gedung Arsip Lantai 2',
                 'Jl. Gatot Subroto Kav. 31, Jakarta Pusat 10210',
             ],
+            'maps_url' => 'https://www.google.com/maps/place/?q=place_id:ChIJYRGTVbr2aS4RIqoUDnVCjPY',
         ],
         [
             'icon'  => 'bi-telephone-fill',
@@ -40,7 +41,19 @@
 
         <div class="spkn-footer__grid">
             @foreach ($kontak as $item)
-                <div class="spkn-footer__card">
+                @php
+                    $isLink = isset($item['maps_url']);
+                    $tag    = $isLink ? 'a' : 'div';
+                @endphp
+                <{{ $tag }}
+                    class="spkn-footer__card{{ $isLink ? ' spkn-footer__card--link' : '' }}"
+                    @if ($isLink)
+                        href="{{ $item['maps_url'] }}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        title="Buka lokasi di Google Maps"
+                    @endif
+                >
                     <div class="spkn-footer__icon">
                         <i class="bi {{ $item['icon'] }}" aria-hidden="true"></i>
                     </div>
@@ -48,7 +61,7 @@
                     @foreach ($item['lines'] as $line)
                         <div class="spkn-footer__card-line">{{ $line }}</div>
                     @endforeach
-                </div>
+                </{{ $tag }}>
             @endforeach
         </div>
 
