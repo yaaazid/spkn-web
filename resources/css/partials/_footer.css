@@ -186,3 +186,15 @@
   .spkn-footer__grid { grid-template-columns: 1fr; }
   .spkn-footer__bottom { justify-content: center; text-align: center; }
 }
+
+/* --- Varian ringkas: halaman selain Beranda, cuma bar copyright --- */
+.spkn-footer--compact {
+  background: var(--spkn-navy-800);
+  padding: 0 20px;
+  border-radius: 0;
+}
+
+.spkn-footer--compact .spkn-footer__bottom {
+  padding: 18px 0;
+  border-top: none;
+}

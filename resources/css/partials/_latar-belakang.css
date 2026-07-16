@@ -1,0 +1,114 @@
+/**
+ * Section "Latar Belakang" (Pembentukan Komite SPKN 2010) — halaman Sejarah.
+ * Kartu narasi + daftar bernomor, gaya kartu putih polos (bukan glass) supaya
+ * teks panjang tetap nyaman dibaca kontras di atasnya.
+ */
+
+.spkn-latar {
+  /* Navbar posisinya fixed (top:16px, lihat _navbar.css) dan selalu mengambang
+     di atas konten apa pun yang sedang discroll. Section ini section PERTAMA
+     setelah <x-page-header>, jadi dikasih jarak atas ekstra (bukan cuma 16px)
+     supaya judulnya tidak gampang ketutup navbar pas pengguna scroll ke sini —
+     pola yang sama seperti alasan .spkn-page-header dikasih padding-top besar. */
+  padding: 56px 20px 96px;
+  background: #f4f4fb; /* nyambung dengan latar .spkn-page-header di atasnya */
+}
+
+.spkn-latar__inner {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.spkn-latar__badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  background: var(--spkn-indigo-tint);
+  color: var(--spkn-indigo-600);
+  font-family: ui-monospace, SFMono-Regular, "JetBrains Mono", Menlo, monospace;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.spkn-latar__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(24px, 2.6vw, 30px);
+  color: var(--spkn-navy-800);
+  margin: 0 0 44px;
+}
+
+.spkn-latar__card {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  padding: 48px 48px 52px;
+  box-shadow: 0 4px 20px rgba(15, 27, 61, 0.05);
+}
+
+.spkn-latar__card p {
+  font-family: var(--font-body);
+  font-size: 15.5px;
+  line-height: 1.85;
+  color: var(--spkn-ink-muted);
+  margin: 0 0 22px;
+}
+
+.spkn-latar__card p:last-child {
+  margin-bottom: 0;
+}
+
+.spkn-latar__list {
+  list-style: none;
+  counter-reset: latar-item;
+  margin: 0 0 22px;
+  padding: 0;
+}
+
+.spkn-latar__list > li {
+  position: relative;
+  counter-increment: latar-item;
+  padding-left: 30px;
+  font-family: var(--font-body);
+  font-size: 15.5px;
+  line-height: 1.85;
+  color: var(--spkn-ink-muted);
+  margin-bottom: 10px;
+}
+
+.spkn-latar__list > li::before {
+  content: counter(latar-item) ".";
+  position: absolute;
+  left: 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--spkn-indigo-600);
+}
+
+.spkn-latar__list strong {
+  color: var(--spkn-navy-800);
+  font-weight: 700;
+}
+
+.spkn-latar__sublist {
+  list-style: disc;
+  margin: 10px 0 0;
+  padding-left: 22px;
+}
+
+.spkn-latar__sublist li {
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--spkn-ink-muted);
+  margin-bottom: 4px;
+}
+
+@media (max-width: 575.98px) {
+  .spkn-latar__card {
+    padding: 32px 24px 36px;
+  }
+}
