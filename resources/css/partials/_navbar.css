@@ -8,6 +8,15 @@
  * - Begitu discroll (class .is-scrolled ditambah JS, lihat navbar-scroll.js):
  *   navbar mengecil jadi pill kaca mengambang, nav-list & search disembunyikan,
  *   diganti tombol "Menu" yang membuka panel nav-list saat diklik.
+ *
+ * - Halaman TANPA hero gelap (mis. committee.history): teks putih dari mode
+ *   "landing" di atas jadi tidak kebaca karena latarnya terang. Untuk kasus
+ *   ini, navbar.blade.php menambahkan class .no-hero (server-side, bukan
+ *   nunggu di-scroll) yang pakai ULANG warna teks gelap & panel kaca dari
+ *   .is-scrolled, TAPI TIDAK ikut memicu perilaku "mengecil jadi tombol Menu"
+ *   — menu tetap tampil penuh sejak awal. Makanya rule-rule warna di bawah
+ *   sengaja ditulis `.is-scrolled X, .no-hero X { ... }` alih-alih menyatukan
+ *   .no-hero ke .is-scrolled begitu saja.
  */
 
 .spkn-navbar-wrap {
@@ -47,7 +56,8 @@
   transition: opacity .25s ease;
 }
 
-.spkn-navbar-wrap.is-scrolled .spkn-navbar__chrome {
+.spkn-navbar-wrap.is-scrolled .spkn-navbar__chrome,
+.spkn-navbar-wrap.no-hero .spkn-navbar__chrome {
   opacity: 1;
   /* Override background .glass-pill supaya lebih tembus pandang di atas
      latar section yang terang (putih/abu muda) — kalau pakai opacity putih
@@ -89,7 +99,8 @@
   transition: color .25s ease;
 }
 
-.spkn-navbar-wrap.is-scrolled .spkn-brand {
+.spkn-navbar-wrap.is-scrolled .spkn-brand,
+.spkn-navbar-wrap.no-hero .spkn-brand {
   color: var(--spkn-ink); /* balik gelap begitu ada latar kaca terang */
 }
 
@@ -140,7 +151,8 @@
   transition: background-color .18s ease, color .18s ease;
 }
 
-.spkn-navbar-wrap.is-scrolled .spkn-nav-link {
+.spkn-navbar-wrap.is-scrolled .spkn-nav-link,
+.spkn-navbar-wrap.no-hero .spkn-nav-link {
   color: var(--spkn-ink);
 }
 
@@ -148,7 +160,8 @@
   background: rgba(255, 255, 255, 0.15);
 }
 
-.spkn-navbar-wrap.is-scrolled .spkn-nav-link:hover {
+.spkn-navbar-wrap.is-scrolled .spkn-nav-link:hover,
+.spkn-navbar-wrap.no-hero .spkn-nav-link:hover {
   background: var(--spkn-indigo-tint);
 }
 
@@ -192,7 +205,8 @@
   transition: background-color .25s ease, border-color .25s ease, color .25s ease;
 }
 
-.spkn-navbar-wrap.is-scrolled .spkn-icon-btn {
+.spkn-navbar-wrap.is-scrolled .spkn-icon-btn,
+.spkn-navbar-wrap.no-hero .spkn-icon-btn {
   background: rgba(255, 255, 255, 0.7);
   border-color: var(--glass-border);
   color: var(--spkn-ink);

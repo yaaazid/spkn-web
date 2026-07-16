@@ -14,7 +14,7 @@
 --}}
 <div class="spkn-navbar-root" data-navbar-root>
 
-    <div class="spkn-navbar-wrap">
+    <div class="spkn-navbar-wrap {{ request()->routeIs('home') ? '' : 'no-hero' }}">
         <nav class="spkn-navbar" aria-label="Navigasi utama">
 
             <div class="spkn-navbar__chrome glass-pill glass-sheen" aria-hidden="true"></div>
