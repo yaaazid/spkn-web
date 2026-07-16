@@ -1,28 +1,18 @@
 /**
  * Navbar — SPKN BPK RI
  *
- * Perilaku scroll (meniru atescape.id):
- * - Di landing (belum discroll): navbar diam, full-width, transparan
- *   (tanpa panel kaca), teks putih supaya kebaca di atas foto hero, semua
- *   menu tampil penuh.
- * - Begitu discroll (class .is-scrolled ditambah JS, lihat navbar-scroll.js):
- *   navbar mengecil jadi pill kaca mengambang, nav-list & search disembunyikan,
- *   diganti tombol "Menu" yang membuka panel nav-list saat diklik.
- *
- * - Halaman TANPA hero gelap (mis. committee.history): teks putih dari mode
- *   "landing" di atas jadi tidak kebaca karena latarnya terang. Untuk kasus
- *   ini, navbar.blade.php menambahkan class .no-hero (server-side, bukan
- *   nunggu di-scroll) yang pakai ULANG warna teks gelap & panel kaca dari
- *   .is-scrolled, TAPI TIDAK ikut memicu perilaku "mengecil jadi tombol Menu"
- *   — menu tetap tampil penuh sejak awal. Makanya rule-rule warna di bawah
- *   sengaja ditulis `.is-scrolled X, .no-hero X { ... }` alih-alih menyatukan
- *   .no-hero ke .is-scrolled begitu saja.
+ * Perilaku scroll:
+ * - Landing (belum scroll): navbar full-width transparan, teks putih,
+ *   semua menu tampil penuh, efek kaca sangat tipis.
+ * - Discroll (.is-scrolled via JS): navbar mengecil jadi pill kaca mengambang,
+ *   nav-list & search sembunyi, diganti tombol "Menu".
+ * - Halaman tanpa hero (.no-hero via blade): warna teks gelap + kaca aktif,
+ *   tapi menu tetap tampil penuh (tidak collapse jadi pill).
  */
 
+/* ─── Wrapper ──────────────────────────────────────────────── */
 .spkn-navbar-wrap {
-  position: fixed; /* bukan sticky — sticky cuma nempel selagi parent-nya (.spkn-hero)
-                       masih kelihatan; fixed bikin navbar ikut terus sampai akhir halaman
-                       apa pun section yang lagi discroll */
+  position: fixed;
   top: 16px;
   left: 0;
   right: 0;
@@ -30,52 +20,146 @@
   padding: 0 20px;
 }
 
+/* ─── Nav container ─────────────────────────────────────────── */
 .spkn-navbar {
   position: relative;
-  max-width: 1440px; /* lebih lebar, pas buat rasio laptop biasa */
+  max-width: 1440px;
   margin: 0 auto;
-  transition: max-width .25s ease;
+  border-radius: 20px;
+  transition: max-width .25s ease, border-radius .25s ease;
 }
 
-/* Saat discroll, pill-nya mengecil ngikutin isi (logo + tombol Menu),
-   bukan tetap melebar penuh kayak navbar landing */
+/* Saat scrolled: pill mengecil menjadi fit-content */
 .spkn-navbar-wrap.is-scrolled .spkn-navbar {
   max-width: fit-content;
+  border-radius: 999px;
 }
 
-/* Lapisan visual kaca (background blur + sheen) — TERPISAH dari konten.
-   Di landing tetap kelihatan (opacity medium, ~55%) supaya border/efek
-   liquid glass-nya tetap terasa, bukan transparan total. Begitu discroll,
-   opacity naik penuh + pill-nya mengecil (lihat .is-scrolled di bawah). */
+/* ─── Chrome (lapisan visual kaca — TERPISAH dari konten) ───── */
+/*
+ * __chrome adalah layer VISUAL SAJA (background, blur, sheen).
+ * __content adalah layer KONTEN (logo, menu, dropdown).
+ * Memisahkan keduanya = overflow:hidden di chrome tidak memotong dropdown.
+ */
 .spkn-navbar__chrome {
   position: absolute;
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  opacity: 0.55;
-  transition: opacity .25s ease;
-}
+  border-radius: inherit;
+  overflow: hidden;          /* safe: tidak ada konten di sini */
 
-.spkn-navbar-wrap.is-scrolled .spkn-navbar__chrome,
-.spkn-navbar-wrap.no-hero .spkn-navbar__chrome {
-  opacity: 1;
-  /* Override background .glass-pill supaya lebih tembus pandang di atas
-     latar section yang terang (putih/abu muda) — kalau pakai opacity putih
-     bawaan .glass-pill (.78/.5), di atas bg terang nyaris keliatan solid putih,
-     bukan kaca. */
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.26), rgba(255, 255, 255, 0.12));
-  backdrop-filter: blur(28px) saturate(220%) brightness(1.1);
-  -webkit-backdrop-filter: blur(28px) saturate(220%) brightness(1.1);
+  /* ── STATE DEFAULT (landing, belum scroll) ── */
+  /* Kaca sangat tipis — hero foto masih keliatan jelas */
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(8px) saturate(140%);
+  -webkit-backdrop-filter: blur(8px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   box-shadow:
-    0 10px 34px rgba(15, 27, 61, 0.14),
-    0 1px 3px rgba(15, 27, 61, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.7),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.18);
+    0 2px 16px rgba(15, 27, 61, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+
+  transition:
+    background .3s ease,
+    backdrop-filter .3s ease,
+    border-color .3s ease,
+    box-shadow .3s ease;
 }
 
+/* ── Iridescent sheen (kuning BPK → violet → biru) ── */
+.spkn-navbar__chrome::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(
+    118deg,
+    rgba(247, 201, 72, 0.0)  0%,
+    rgba(139, 124, 246, 0.0) 50%,
+    rgba(99, 179, 237, 0.0)  100%
+  );
+  mix-blend-mode: screen;
+  transition: background .3s ease;
+}
+
+/* ── Top-edge highlight (garis pelangi khas kaca iOS) ── */
+.spkn-navbar__chrome::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 12%;
+  right: 12%;
+  height: 1px;
+  border-radius: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent                     0%,
+    rgba(255, 255, 255, 0.0)       30%,
+    rgba(255, 230, 150, 0.0)       50%,
+    rgba(180, 200, 255, 0.0)       70%,
+    transparent                    100%
+  );
+  transition: background .3s ease;
+}
+
+/* ── STATE AKTIF: scrolled atau no-hero ── */
+.spkn-navbar-wrap.is-scrolled .spkn-navbar__chrome,
+.spkn-navbar-wrap.no-hero    .spkn-navbar__chrome {
+
+  /* Liquid glass iOS: putih transparan + blur kuat */
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.30) 0%,
+    rgba(255, 255, 255, 0.16) 50%,
+    rgba(255, 255, 255, 0.22) 100%
+  );
+  backdrop-filter: blur(32px) saturate(240%) brightness(1.08);
+  -webkit-backdrop-filter: blur(32px) saturate(240%) brightness(1.08);
+
+  border-color: rgba(255, 255, 255, 0.52);
+
+  box-shadow:
+    /* outer drop shadow */
+    0 12px 40px rgba(15, 27, 61, 0.16),
+    0 2px  8px  rgba(15, 27, 61, 0.08),
+    /* inner top — ketebalan kaca */
+    inset 0  1.5px 0 rgba(255, 255, 255, 0.78),
+    /* inner bottom rim */
+    inset 0 -1px  0 rgba(255, 255, 255, 0.22),
+    /* subtle inner blue glow */
+    inset 0  0   20px rgba(130, 160, 255, 0.06);
+}
+
+/* Aktifkan sheen saat kaca aktif */
+.spkn-navbar-wrap.is-scrolled .spkn-navbar__chrome::before,
+.spkn-navbar-wrap.no-hero    .spkn-navbar__chrome::before {
+  background: linear-gradient(
+    118deg,
+    rgba(247, 201, 72, 0.13)   0%,    /* gold/kuning BPK */
+    rgba(139, 124, 246, 0.08)  35%,   /* violet */
+    rgba(99,  179, 237, 0.10)  60%,   /* biru muda */
+    rgba(247, 201, 72, 0.06)   100%   /* gold lagi */
+  );
+}
+
+/* Aktifkan top-edge highlight saat kaca aktif */
+.spkn-navbar-wrap.is-scrolled .spkn-navbar__chrome::after,
+.spkn-navbar-wrap.no-hero    .spkn-navbar__chrome::after {
+  background: linear-gradient(
+    90deg,
+    transparent                   0%,
+    rgba(255, 255, 255, 0.55)    30%,
+    rgba(255, 230, 150, 0.40)    50%,   /* warm gold */
+    rgba(180, 200, 255, 0.45)    70%,   /* cool blue */
+    transparent                  100%
+  );
+}
+
+/* ─── Content layer ─────────────────────────────────────────── */
 .spkn-navbar__content {
   position: relative;
-  z-index: 1;
+  z-index: 1;           /* di atas __chrome */
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -85,23 +169,23 @@
 }
 
 .spkn-navbar-wrap.is-scrolled .spkn-navbar__content {
-  padding: 10px 20px 10px 14px; /* lega di kanan-kiri, tapi pill-nya sendiri sudah fit-content jadi tetap ringkas */
+  padding: 10px 20px 10px 14px;
   gap: 28px;
 }
 
-/* --- Brand --- */
+/* ─── Brand ─────────────────────────────────────────────────── */
 .spkn-brand {
   display: flex;
   align-items: center;
   gap: 10px;
   text-decoration: none;
-  color: #fff; /* putih di landing, di atas foto hero */
+  color: #fff;
   transition: color .25s ease;
 }
 
 .spkn-navbar-wrap.is-scrolled .spkn-brand,
-.spkn-navbar-wrap.no-hero .spkn-brand {
-  color: var(--spkn-ink); /* balik gelap begitu ada latar kaca terang */
+.spkn-navbar-wrap.no-hero    .spkn-brand {
+  color: var(--spkn-ink);
 }
 
 .spkn-brand__mark {
@@ -124,7 +208,7 @@
   line-height: 1.2;
 }
 
-/* --- Nav list --- */
+/* ─── Nav list ──────────────────────────────────────────────── */
 .spkn-nav-list {
   display: flex;
   align-items: center;
@@ -143,7 +227,7 @@
   font-family: var(--font-body);
   font-weight: 600;
   font-size: 14.5px;
-  color: #fff; /* putih di landing */
+  color: #fff;
   text-decoration: none;
   background: transparent;
   border: none;
@@ -152,7 +236,7 @@
 }
 
 .spkn-navbar-wrap.is-scrolled .spkn-nav-link,
-.spkn-navbar-wrap.no-hero .spkn-nav-link {
+.spkn-navbar-wrap.no-hero    .spkn-nav-link {
   color: var(--spkn-ink);
 }
 
@@ -161,7 +245,7 @@
 }
 
 .spkn-navbar-wrap.is-scrolled .spkn-nav-link:hover,
-.spkn-navbar-wrap.no-hero .spkn-nav-link:hover {
+.spkn-navbar-wrap.no-hero    .spkn-nav-link:hover {
   background: var(--spkn-indigo-tint);
 }
 
@@ -185,7 +269,7 @@
   transform: rotate(180deg);
 }
 
-/* --- Actions (search) --- */
+/* ─── Actions (search) ──────────────────────────────────────── */
 .spkn-nav-actions {
   display: flex;
   align-items: center;
@@ -199,21 +283,20 @@
   height: 40px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.40);
   color: #fff;
   cursor: pointer;
   transition: background-color .25s ease, border-color .25s ease, color .25s ease;
 }
 
 .spkn-navbar-wrap.is-scrolled .spkn-icon-btn,
-.spkn-navbar-wrap.no-hero .spkn-icon-btn {
-  background: rgba(255, 255, 255, 0.7);
+.spkn-navbar-wrap.no-hero    .spkn-icon-btn {
+  background: rgba(255, 255, 255, 0.70);
   border-color: var(--glass-border);
   color: var(--spkn-ink);
 }
 
-/* --- Tombol "Menu" — muncul saat navbar dalam mode ramping
-       (di-scroll di desktop, ATAU selalu di mobile) --- */
+/* ─── Tombol "Menu" ─────────────────────────────────────────── */
 .spkn-menu-toggle {
   display: none;
   align-items: center;
@@ -230,6 +313,11 @@
   transition: color .25s ease, background-color .18s ease;
 }
 
+.spkn-navbar-wrap.is-scrolled .spkn-menu-toggle,
+.spkn-navbar-root.is-menu-open .spkn-menu-toggle {
+  display: inline-flex;
+}
+
 .spkn-navbar-wrap.is-scrolled .spkn-menu-toggle {
   color: var(--spkn-ink);
 }
@@ -242,25 +330,17 @@
   background: var(--spkn-indigo-tint);
 }
 
-.spkn-navbar-wrap.is-scrolled .spkn-menu-toggle,
-.spkn-navbar-root.is-menu-open .spkn-menu-toggle {
-  display: inline-flex;
-}
-
-/* Sembunyikan nav-list & search saat mode ramping, digantikan tombol Menu */
+/* Sembunyikan nav-list & search saat mode ramping */
 .spkn-navbar-wrap.is-scrolled .spkn-nav-list,
 .spkn-navbar-wrap.is-scrolled .spkn-nav-actions {
   display: none;
 }
 
-/* --- Off-canvas menu (meniru atescape.id) ---
-   Saat tombol "Menu" diklik, class .is-menu-open ditambah ke .spkn-navbar-root
-   (lihat navbar-scroll.js). Backdrop gelap + panel sidebar slide dari kiri. */
-
+/* ─── Off-canvas ────────────────────────────────────────────── */
 .spkn-offcanvas-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(11, 18, 41, 0.6);
+  background: rgba(11, 18, 41, 0.60);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
   opacity: 0;
@@ -276,9 +356,7 @@
 
 .spkn-offcanvas {
   position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
+  top: 0; left: 0; bottom: 0;
   width: 320px;
   max-width: 85vw;
   padding: 32px 28px;
@@ -306,8 +384,7 @@
 
 .spkn-offcanvas__list {
   list-style: none;
-  margin: 0;
-  padding: 0;
+  margin: 0; padding: 0;
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -354,7 +431,7 @@
 }
 
 .spkn-offcanvas__group.is-open .spkn-offcanvas__submenu {
-  max-height: 600px; /* cukup buat submenu terpanjang (Produk dan Referensi) */
+  max-height: 600px;
 }
 
 .spkn-offcanvas__sublink {
@@ -371,7 +448,7 @@
   border-left-color: var(--spkn-violet-400);
 }
 
-/* --- Dropdown (mega menu) --- */
+/* ─── Dropdown (mega menu) ──────────────────────────────────── */
 .spkn-nav-item {
   position: relative;
 }
@@ -389,9 +466,6 @@
   pointer-events: none;
 }
 
-/* Muncul dikontrol JS lewat class .is-open (lihat navbar-dropdown.js) —
-   bukan CSS :hover murni, supaya ada jeda tutup saat kursor lewat celah
-   antara trigger dan panel. */
 .spkn-nav-item.is-open .spkn-dropdown {
   opacity: 1;
   visibility: visible;
@@ -401,8 +475,7 @@
 
 .spkn-dropdown__list {
   list-style: none;
-  margin: 0;
-  padding: 0;
+  margin: 0; padding: 0;
 }
 
 .spkn-dropdown__link {
@@ -425,7 +498,7 @@
   color: var(--spkn-indigo-600);
 }
 
-/* --- Flyout (submenu tingkat dua, mis. Struktur Tim Teknis) --- */
+/* ─── Flyout ────────────────────────────────────────────────── */
 .spkn-dropdown__item {
   position: relative;
 }
@@ -437,36 +510,26 @@
   width: 340px;
   max-height: 380px;
   overflow-y: auto;
-  padding: 14px 8px 14px 14px; /* right lebih kecil, dikompensasi scrollbar tipis di bawah */
+  padding: 14px 8px 14px 14px;
   opacity: 0;
   visibility: hidden;
   transform: translateX(-6px);
   transition: opacity .16s ease, transform .16s ease, visibility .16s;
   pointer-events: none;
-
-  /* Scrollbar tipis & senada tema, bukan scrollbar default OS yang tebal */
   scrollbar-width: thin;
   scrollbar-color: rgba(109, 91, 245, 0.35) transparent;
 }
 
-.spkn-flyout::-webkit-scrollbar {
-  width: 6px;
-}
-
-.spkn-flyout::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.spkn-flyout::-webkit-scrollbar-thumb {
+.spkn-flyout::-webkit-scrollbar        { width: 6px; }
+.spkn-flyout::-webkit-scrollbar-track  { background: transparent; }
+.spkn-flyout::-webkit-scrollbar-thumb  {
   background: rgba(109, 91, 245, 0.35);
   border-radius: var(--radius-pill);
 }
-
 .spkn-flyout::-webkit-scrollbar-thumb:hover {
   background: rgba(109, 91, 245, 0.55);
 }
 
-/* Muncul dikontrol JS lewat class .is-flyout-open (lihat navbar-dropdown.js) */
 .spkn-dropdown__item.is-flyout-open .spkn-flyout {
   opacity: 1;
   visibility: visible;
@@ -494,8 +557,7 @@
 
 .spkn-flyout__icon {
   flex: none;
-  width: 28px;
-  height: 28px;
+  width: 28px; height: 28px;
   border-radius: 8px;
   display: grid;
   place-items: center;
@@ -503,10 +565,10 @@
   color: var(--spkn-indigo-500);
 }
 
-/* --- Mobile: selalu mode ramping (sama seperti .is-scrolled di desktop) --- */
+/* ─── Mobile ────────────────────────────────────────────────── */
 @media (max-width: 991.98px) {
   .spkn-nav-list,
-  .spkn-nav-actions { display: none; }
-  .spkn-menu-toggle { display: inline-flex; color: #fff; }
+  .spkn-nav-actions          { display: none; }
+  .spkn-menu-toggle          { display: inline-flex; color: #fff; }
   .spkn-navbar-wrap.is-scrolled .spkn-menu-toggle { color: var(--spkn-ink); }
 }
