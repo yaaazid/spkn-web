@@ -1,3 +1,67 @@
-<footer class="py-4 text-center" style="background: var(--spkn-navy-800); color: rgba(255,255,255,.7);">
-    <small>&copy; {{ date('Y') }} Komite Standar Pemeriksaan Keuangan Negara — BPK RI</small>
+{{--
+    Footer — dipakai di semua halaman publik lewat layouts/app.blade.php.
+    $kontak BISA disuplai dari controller kalau nanti mau dibikin dinamis
+    dari admin. Fallback statis di bawah dipakai kalau belum dikirim.
+--}}
+@php
+    $kontak ??= [
+        [
+            'icon'  => 'bi-geo-alt-fill',
+            'title' => 'Alamat',
+            'lines' => [
+                'Sekretariat Komite SPKN',
+                'Badan Pemeriksa Keuangan RI',
+                'Gedung Arsip Lantai 2',
+                'Jl. Gatot Subroto Kav. 31, Jakarta Pusat 10210',
+            ],
+        ],
+        [
+            'icon'  => 'bi-telephone-fill',
+            'title' => 'Kontak Kami',
+            'lines' => ['+6221 2554 9000', 'Ext. 3296'],
+        ],
+        [
+            'icon'  => 'bi-envelope-fill',
+            'title' => 'Alamat Email',
+            'lines' => ['komite.spkn@bpk.go.id'],
+        ],
+        [
+            'icon'  => 'bi-clock-fill',
+            'title' => 'Jam Kerja',
+            'lines' => ['Senin – Jumat', '09.00 – 15.00 WIB'],
+        ],
+    ];
+@endphp
+
+<footer class="spkn-footer">
+    <div class="spkn-footer__inner">
+        <span class="spkn-footer__badge">Hubungi Kami</span>
+        <h2 class="spkn-footer__title">Kami siap membantu</h2>
+
+        <div class="spkn-footer__grid">
+            @foreach ($kontak as $item)
+                <div class="spkn-footer__card">
+                    <div class="spkn-footer__icon">
+                        <i class="bi {{ $item['icon'] }}" aria-hidden="true"></i>
+                    </div>
+                    <h3 class="spkn-footer__card-title">{{ $item['title'] }}</h3>
+                    @foreach ($item['lines'] as $line)
+                        <div class="spkn-footer__card-line">{{ $line }}</div>
+                    @endforeach
+                </div>
+            @endforeach
+        </div>
+
+        <div class="spkn-footer__bottom">
+            <span>&copy; Copyright <strong>SPKN</strong>. All Rights Reserved</span>
+            <span>Designed by <a href="{{ route('home') }}">SPKN BPK-RI</a></span>
+            <button type="button" class="spkn-footer__settings" aria-label="Pengaturan">
+                <i class="bi bi-gear" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
 </footer>
+
+<button type="button" class="spkn-back-to-top" data-back-to-top aria-label="Kembali ke atas">
+    <i class="bi bi-arrow-up" aria-hidden="true"></i>
+</button>
