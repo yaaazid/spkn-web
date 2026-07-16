@@ -9,6 +9,13 @@
               ke database (mis. tabel committee_members). Fallback statis di
               bawah dipakai kalau belum dikirim — datanya mengikuti susunan
               resmi BPK RI per periode 2024-2029 (sumber: bpk.go.id/menu/profil_bpk).
+
+    Catatan struktur "panitia-kerja": jenjangnya lebih dalam dari Dewan
+    Konsultatif (Penanggung Jawab -> Wakil Penanggung Jawab -> Ketua, lalu
+    Ketua bercabang ke Sekretaris & Anggota), jadi dipakai key tambahan
+    'penanggung_jawab', 'wakil_penanggung_jawab', dan 'sekretaris' di bawah.
+    Kalau key-key itu tidak ada (mis. dewan-konsultatif), bagan otomatis
+    fallback ke layout lama (ketua/wakil/anggota, 3 level).
 --}}
 @php
     $dataUnsur ??= [
@@ -34,20 +41,65 @@
         ],
         'panitia-kerja' => [
             'judul' => 'Panitia Kerja',
-            'ketua' => null,
+            'penanggung_jawab' => [
+                'nama' => 'Bahtiar Arif',
+                'jabatan' => 'Penanggung Jawab',
+            ],
+            'wakil_penanggung_jawab' => [
+                'nama' => 'Bernardus Dwita Pradana',
+                'jabatan' => 'Wakil Penanggung Jawab',
+            ],
+            'ketua' => [
+                'nama' => 'Nelson Ambarita',
+                'jabatan' => 'Ketua',
+            ],
             'wakil' => null,
-            'anggota' => [],
+            'sekretaris' => [
+                'nama' => 'Selvia Vivi Devianti',
+                'jabatan' => 'Sekretaris',
+            ],
+            'anggota' => [
+                ['nama' => 'Akhsanul Khaq',                    'jabatan' => 'Anggota'],
+                ['nama' => 'Ahmad Adib Susilo',                'jabatan' => 'Anggota'],
+                ['nama' => 'Syamsudin',                        'jabatan' => 'Anggota'],
+                ['nama' => 'Slamet Kurniawan',                 'jabatan' => 'Anggota'],
+                ['nama' => 'Laode Nusriadi',                   'jabatan' => 'Anggota'],
+                ['nama' => 'Novy Gregory Antonius Pelenkahu',  'jabatan' => 'Anggota'],
+                ['nama' => 'Hery Subowo',                      'jabatan' => 'Anggota'],
+                ['nama' => 'I Nyoman Wara',                    'jabatan' => 'Anggota'],
+                ['nama' => 'Akhmad Anang Hernady',             'jabatan' => 'Anggota'],
+                ['nama' => 'Beni Ruslandi',                    'jabatan' => 'Anggota'],
+                ['nama' => 'Dori Santosa',                     'jabatan' => 'Anggota'],
+                ['nama' => 'Novian Herodwijanto',              'jabatan' => 'Anggota'],
+                ['nama' => 'Edward Ganda Hasiholan S',         'jabatan' => 'Anggota'],
+                ['nama' => 'Dadang Ahmad Rifa`i',               'jabatan' => 'Anggota'],
+                ['nama' => 'Suwarni Dyah Setyaningsih',        'jabatan' => 'Anggota'],
+            ],
         ],
         'sekretariat-spkn' => [
             'judul' => 'Sekretariat SPKN',
-            'ketua' => null,
+            'legend_ketua' => 'Kepala',
+            'ketua' => [
+                'nama' => 'Basiswanto Wiratama',
+                'jabatan' => 'Kepala',
+            ],
             'wakil' => null,
-            'anggota' => [],
+            'anggota' => [
+                ['nama' => 'Kodarsih Istikoma',          'jabatan' => 'Anggota'],
+                ['nama' => 'Istiqamah Fitri Riyowati',   'jabatan' => 'Anggota'],
+                ['nama' => 'Ratna Kartika Sari',         'jabatan' => 'Anggota'],
+                ['nama' => 'Nugroho Agus Rianto',        'jabatan' => 'Anggota'],
+            ],
         ],
     ];
 
     $slugAktif = $param ?? 'dewan-konsultatif';
     $unsur ??= $dataUnsur[$slugAktif] ?? $dataUnsur['dewan-konsultatif'];
+
+    // Struktur "panitia-kerja" punya 2 jenjang tambahan di atas Ketua, jadi
+    // dibedakan dari layout lama (dewan-konsultatif: ketua/wakil/anggota).
+    $isExtended = !empty($unsur['penanggung_jawab']);
+    $isKosong = empty($unsur['penanggung_jawab']) && empty($unsur['ketua']) && empty($unsur['anggota']);
 
     // Dipakai untuk bikin id unik tiap kartu (buat modal profil & elemen yang
     // perlu direferensikan JS), supaya aman walau ada nama yang sama persis
@@ -60,9 +112,33 @@
         <div>
             <h3 class="spkn-struktur__panel-title">Struktur {{ $unsur['judul'] }}</h3>
             <div class="spkn-struktur__legend">
-                <span><i class="spkn-struktur__dot spkn-struktur__dot--ketua"></i> Ketua</span>
-                <span><i class="spkn-struktur__dot spkn-struktur__dot--wakil"></i> Wakil Ketua</span>
-                <span><i class="spkn-struktur__dot spkn-struktur__dot--anggota"></i> Anggota</span>
+                @if ($isExtended)
+                    @if ($unsur['penanggung_jawab'] ?? null)
+                        <span><i class="spkn-struktur__dot spkn-struktur__dot--jawab"></i> Penanggung Jawab</span>
+                    @endif
+                    @if ($unsur['wakil_penanggung_jawab'] ?? null)
+                        <span><i class="spkn-struktur__dot spkn-struktur__dot--wakil-jawab"></i> Wakil Penanggung Jawab</span>
+                    @endif
+                    @if ($unsur['ketua'] ?? null)
+                        <span><i class="spkn-struktur__dot spkn-struktur__dot--ketua-pk"></i> Ketua</span>
+                    @endif
+                    @if (!empty($unsur['anggota']))
+                        <span><i class="spkn-struktur__dot spkn-struktur__dot--anggota-pk"></i> Anggota</span>
+                    @endif
+                    @if ($unsur['sekretaris'] ?? null)
+                        <span><i class="spkn-struktur__dot spkn-struktur__dot--sekretaris"></i> Sekretaris</span>
+                    @endif
+                @else
+                    @if ($unsur['ketua'] ?? null)
+                        <span><i class="spkn-struktur__dot spkn-struktur__dot--ketua"></i> {{ $unsur['legend_ketua'] ?? 'Ketua' }}</span>
+                    @endif
+                    @if ($unsur['wakil'] ?? null)
+                        <span><i class="spkn-struktur__dot spkn-struktur__dot--wakil"></i> {{ $unsur['legend_wakil'] ?? 'Wakil Ketua' }}</span>
+                    @endif
+                    @if (!empty($unsur['anggota']))
+                        <span><i class="spkn-struktur__dot spkn-struktur__dot--anggota"></i> Anggota</span>
+                    @endif
+                @endif
             </div>
         </div>
 
@@ -71,69 +147,173 @@
         </button>
     </div>
 
-    @if (!$unsur['ketua'] && empty($unsur['anggota']))
+    @if ($isKosong)
         <p class="spkn-struktur__empty">
             Bagan struktur untuk <strong>{{ $unsur['judul'] }}</strong> belum tersedia.
         </p>
     @else
         <div class="spkn-struktur__chart" data-struktur-chart>
-            @if ($unsur['ketua'])
-                <div class="spkn-struktur__level">
-                    <button
-                        type="button"
-                        class="spkn-struktur__node spkn-struktur__node--ketua"
-                        data-bs-toggle="modal"
-                        data-bs-target="#profil-{{ $slugNama($unsur['ketua']['nama'], 0) }}"
-                    >
-                        <span class="spkn-struktur__avatar"><i class="bi bi-person-fill" aria-hidden="true"></i></span>
-                        <span class="spkn-struktur__node-jabatan">{{ $unsur['ketua']['jabatan'] }}</span>
-                        <span class="spkn-struktur__node-nama">{{ $unsur['ketua']['nama'] }}</span>
-                        <span class="spkn-struktur__node-hint">Klik untuk lihat profil</span>
-                    </button>
-                </div>
-            @endif
-
-            @if ($unsur['wakil'])
-                <div class="spkn-struktur__connector-v" aria-hidden="true"></div>
-                <div class="spkn-struktur__level">
-                    <button
-                        type="button"
-                        class="spkn-struktur__node spkn-struktur__node--wakil"
-                        data-bs-toggle="modal"
-                        data-bs-target="#profil-{{ $slugNama($unsur['wakil']['nama'], 1) }}"
-                    >
-                        <span class="spkn-struktur__avatar"><i class="bi bi-person-fill" aria-hidden="true"></i></span>
-                        <span class="spkn-struktur__node-jabatan">{{ $unsur['wakil']['jabatan'] }}</span>
-                        <span class="spkn-struktur__node-nama">{{ $unsur['wakil']['nama'] }}</span>
-                        <span class="spkn-struktur__node-hint">Klik untuk lihat profil</span>
-                    </button>
-                </div>
-            @endif
-
-            @if (!empty($unsur['anggota']))
-                <div class="spkn-struktur__connector-v" aria-hidden="true"></div>
-                <span class="spkn-struktur__branch-label">Anggota</span>
-
-                <div class="spkn-struktur__row">
-                    @foreach ($unsur['anggota'] as $i => $a)
+            @if ($isExtended)
+                {{-- Layout khusus Panitia Kerja: Penanggung Jawab -> Wakil Penanggung
+                     Jawab -> Ketua, lalu Ketua bercabang ke Sekretaris & Anggota. --}}
+                @if ($unsur['penanggung_jawab'] ?? null)
+                    <div class="spkn-struktur__level">
                         <button
                             type="button"
-                            class="spkn-struktur__card"
+                            class="spkn-struktur__node spkn-struktur__node--jawab"
                             data-bs-toggle="modal"
-                            data-bs-target="#profil-{{ $slugNama($a['nama'], $i + 2) }}"
+                            data-bs-target="#profil-{{ $slugNama($unsur['penanggung_jawab']['nama'], 0) }}"
                         >
-                            <span class="spkn-struktur__avatar spkn-struktur__avatar--sm"><i class="bi bi-person-fill" aria-hidden="true"></i></span>
-                            <span class="spkn-struktur__card-jabatan">{{ $a['jabatan'] }}</span>
-                            <span class="spkn-struktur__card-nama">{{ $a['nama'] }}</span>
+                            <span class="spkn-struktur__avatar"><i class="bi bi-person-fill" aria-hidden="true"></i></span>
+                            <span class="spkn-struktur__node-jabatan">{{ $unsur['penanggung_jawab']['jabatan'] }}</span>
+                            <span class="spkn-struktur__node-nama">{{ $unsur['penanggung_jawab']['nama'] }}</span>
+                            <span class="spkn-struktur__node-hint">Klik untuk lihat profil</span>
                         </button>
-                    @endforeach
-                </div>
+                    </div>
+                @endif
+
+                @if ($unsur['wakil_penanggung_jawab'] ?? null)
+                    <div class="spkn-struktur__connector-v" aria-hidden="true"></div>
+                    <div class="spkn-struktur__level">
+                        <button
+                            type="button"
+                            class="spkn-struktur__node spkn-struktur__node--wakil-jawab"
+                            data-bs-toggle="modal"
+                            data-bs-target="#profil-{{ $slugNama($unsur['wakil_penanggung_jawab']['nama'], 1) }}"
+                        >
+                            <span class="spkn-struktur__avatar"><i class="bi bi-person-fill" aria-hidden="true"></i></span>
+                            <span class="spkn-struktur__node-jabatan">{{ $unsur['wakil_penanggung_jawab']['jabatan'] }}</span>
+                            <span class="spkn-struktur__node-nama">{{ $unsur['wakil_penanggung_jawab']['nama'] }}</span>
+                            <span class="spkn-struktur__node-hint">Klik untuk lihat profil</span>
+                        </button>
+                    </div>
+                @endif
+
+                @if ($unsur['ketua'] ?? null)
+                    <div class="spkn-struktur__connector-v" aria-hidden="true"></div>
+                    <div class="spkn-struktur__level">
+                        <button
+                            type="button"
+                            class="spkn-struktur__node spkn-struktur__node--ketua-pk"
+                            data-bs-toggle="modal"
+                            data-bs-target="#profil-{{ $slugNama($unsur['ketua']['nama'], 2) }}"
+                        >
+                            <span class="spkn-struktur__avatar"><i class="bi bi-person-fill" aria-hidden="true"></i></span>
+                            <span class="spkn-struktur__node-jabatan">{{ $unsur['ketua']['jabatan'] }}</span>
+                            <span class="spkn-struktur__node-nama">{{ $unsur['ketua']['nama'] }}</span>
+                            <span class="spkn-struktur__node-hint">Klik untuk lihat profil</span>
+                        </button>
+                    </div>
+                @endif
+
+                @if ($unsur['sekretaris'] ?? null)
+                    <div class="spkn-struktur__fork" aria-hidden="false">
+                        <div class="spkn-struktur__fork-branch">
+                            <div class="spkn-struktur__connector-v spkn-struktur__connector-v--sm" aria-hidden="true"></div>
+                            <button
+                                type="button"
+                                class="spkn-struktur__card spkn-struktur__card--sekretaris"
+                                data-bs-toggle="modal"
+                                data-bs-target="#profil-{{ $slugNama($unsur['sekretaris']['nama'], 3) }}"
+                            >
+                                <span class="spkn-struktur__avatar spkn-struktur__avatar--sm"><i class="bi bi-person-fill" aria-hidden="true"></i></span>
+                                <span class="spkn-struktur__card-jabatan">{{ $unsur['sekretaris']['jabatan'] }}</span>
+                                <span class="spkn-struktur__card-nama">{{ $unsur['sekretaris']['nama'] }}</span>
+                            </button>
+                        </div>
+                    </div>
+                @endif
+
+                @if (!empty($unsur['anggota']))
+                    <div class="spkn-struktur__connector-v" aria-hidden="true"></div>
+                    <span class="spkn-struktur__branch-label">Anggota</span>
+
+                    <div class="spkn-struktur__row spkn-struktur__row--wrap">
+                        @foreach ($unsur['anggota'] as $i => $a)
+                            <button
+                                type="button"
+                                class="spkn-struktur__card"
+                                data-bs-toggle="modal"
+                                data-bs-target="#profil-{{ $slugNama($a['nama'], $i + 4) }}"
+                            >
+                                <span class="spkn-struktur__avatar spkn-struktur__avatar--sm"><i class="bi bi-person-fill" aria-hidden="true"></i></span>
+                                <span class="spkn-struktur__card-jabatan">{{ $a['jabatan'] }}</span>
+                                <span class="spkn-struktur__card-nama">{{ $a['nama'] }}</span>
+                            </button>
+                        @endforeach
+                    </div>
+                @endif
+            @else
+                {{-- Layout lama (Dewan Konsultatif, dst.): Ketua -> Wakil Ketua -> Anggota. --}}
+                @if ($unsur['ketua'])
+                    <div class="spkn-struktur__level">
+                        <button
+                            type="button"
+                            class="spkn-struktur__node spkn-struktur__node--ketua"
+                            data-bs-toggle="modal"
+                            data-bs-target="#profil-{{ $slugNama($unsur['ketua']['nama'], 0) }}"
+                        >
+                            <span class="spkn-struktur__avatar"><i class="bi bi-person-fill" aria-hidden="true"></i></span>
+                            <span class="spkn-struktur__node-jabatan">{{ $unsur['ketua']['jabatan'] }}</span>
+                            <span class="spkn-struktur__node-nama">{{ $unsur['ketua']['nama'] }}</span>
+                            <span class="spkn-struktur__node-hint">Klik untuk lihat profil</span>
+                        </button>
+                    </div>
+                @endif
+
+                @if ($unsur['wakil'])
+                    <div class="spkn-struktur__connector-v" aria-hidden="true"></div>
+                    <div class="spkn-struktur__level">
+                        <button
+                            type="button"
+                            class="spkn-struktur__node spkn-struktur__node--wakil"
+                            data-bs-toggle="modal"
+                            data-bs-target="#profil-{{ $slugNama($unsur['wakil']['nama'], 1) }}"
+                        >
+                            <span class="spkn-struktur__avatar"><i class="bi bi-person-fill" aria-hidden="true"></i></span>
+                            <span class="spkn-struktur__node-jabatan">{{ $unsur['wakil']['jabatan'] }}</span>
+                            <span class="spkn-struktur__node-nama">{{ $unsur['wakil']['nama'] }}</span>
+                            <span class="spkn-struktur__node-hint">Klik untuk lihat profil</span>
+                        </button>
+                    </div>
+                @endif
+
+                @if (!empty($unsur['anggota']))
+                    <div class="spkn-struktur__connector-v" aria-hidden="true"></div>
+                    <span class="spkn-struktur__branch-label">Anggota</span>
+
+                    <div class="spkn-struktur__row">
+                        @foreach ($unsur['anggota'] as $i => $a)
+                            <button
+                                type="button"
+                                class="spkn-struktur__card"
+                                data-bs-toggle="modal"
+                                data-bs-target="#profil-{{ $slugNama($a['nama'], $i + 2) }}"
+                            >
+                                <span class="spkn-struktur__avatar spkn-struktur__avatar--sm"><i class="bi bi-person-fill" aria-hidden="true"></i></span>
+                                <span class="spkn-struktur__card-jabatan">{{ $a['jabatan'] }}</span>
+                                <span class="spkn-struktur__card-nama">{{ $a['nama'] }}</span>
+                            </button>
+                        @endforeach
+                    </div>
+                @endif
             @endif
         </div>
 
         {{-- Modal profil ringkas — dipicu tombol/kartu di atas lewat Bootstrap modal,
              tidak perlu halaman/route terpisah per orang. --}}
-        @foreach (array_filter([$unsur['ketua'], $unsur['wakil'], ...$unsur['anggota']]) as $i => $orang)
+        @php
+            $semuaOrang = $isExtended
+                ? [
+                    $unsur['penanggung_jawab'] ?? null,
+                    $unsur['wakil_penanggung_jawab'] ?? null,
+                    $unsur['ketua'] ?? null,
+                    $unsur['sekretaris'] ?? null,
+                    ...($unsur['anggota'] ?? []),
+                ]
+                : [$unsur['ketua'] ?? null, $unsur['wakil'] ?? null, ...($unsur['anggota'] ?? [])];
+        @endphp
+        @foreach (array_filter($semuaOrang) as $i => $orang)
             <div class="modal fade" id="profil-{{ $slugNama($orang['nama'], $i) }}" tabindex="-1" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content spkn-struktur__modal">
@@ -164,4 +344,4 @@
             </div>
         @endforeach
     @endif
-</div>s
+</div>

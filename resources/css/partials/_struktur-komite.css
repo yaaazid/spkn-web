@@ -383,6 +383,129 @@
   text-decoration: underline;
 }
 
+/* --- Layout khusus "Panitia Kerja": Penanggung Jawab -> Wakil Penanggung
+   Jawab -> Ketua, lalu Ketua bercabang ke Sekretaris & Anggota. Warnanya
+   mengikuti design token yang sudah ada, cuma dipetakan ke jenjang baru:
+   navy = Penanggung Jawab, gold = Wakil Penanggung Jawab, teal = Ketua,
+   indigo/violet = Sekretaris & Anggota. */
+
+.spkn-struktur__dot--jawab       { background: var(--spkn-navy-800); }
+.spkn-struktur__dot--wakil-jawab { background: var(--spkn-gold-500); }
+.spkn-struktur__dot--ketua-pk    { background: var(--spkn-teal-500); }
+.spkn-struktur__dot--anggota-pk  { background: var(--spkn-indigo-500); }
+.spkn-struktur__dot--sekretaris  { background: var(--spkn-violet-400); }
+
+.spkn-struktur__node--jawab {
+  background: var(--spkn-navy-800);
+  color: #fff;
+}
+
+.spkn-struktur__node--wakil-jawab {
+  background: linear-gradient(135deg, var(--spkn-gold-400), var(--spkn-gold-500));
+  color: var(--spkn-navy-800);
+}
+
+.spkn-struktur__node--wakil-jawab .spkn-struktur__avatar {
+  background: rgba(15, 27, 61, 0.12);
+}
+
+.spkn-struktur__node--ketua-pk {
+  background: var(--spkn-teal-500);
+  color: #fff;
+}
+
+/* Cabang Sekretaris di samping trunk Ketua -> Anggota. Branch dibiarkan
+   flow normal (bukan position:absolute) supaya tinggi .spkn-struktur__fork
+   otomatis mengikuti tinggi kartu Sekretaris yang sebenarnya — sebelumnya
+   tinggi fork di-hardcode 56px sehingga kartunya nabrak baris Anggota di
+   bawahnya kalau nama/label-nya lebih dari 1 baris. */
+.spkn-struktur__fork {
+  position: relative;
+  width: 100%;
+  padding-bottom: 40px; /* jarak ke connector/baris Anggota di bawah fork */
+}
+
+.spkn-struktur__fork::before {
+  /* trunk: sambungan vertikal dari node Ketua di atas, terus turun sampai
+     jarak (padding-bottom) sebelum connector Anggota di bawah fork ini */
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 40px;
+  width: 2px;
+  background: rgba(15, 27, 61, 0.15);
+  transform: translateX(-50%);
+}
+
+.spkn-struktur__fork-branch {
+  position: relative;
+  width: 240px;
+  margin: 0 0 0 calc(50% + 48px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.spkn-struktur__fork-branch::before {
+  /* siku horizontal: dari trunk (kiri) ke sisi kiri kartu Sekretaris */
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 100%;
+  width: 48px;
+  height: 2px;
+  background: rgba(15, 27, 61, 0.15);
+}
+
+.spkn-struktur__connector-v--sm {
+  height: 24px;
+}
+
+.spkn-struktur__card--sekretaris {
+  background: var(--spkn-indigo-tint);
+  max-width: none;
+  width: 100%;
+}
+
+.spkn-struktur__card--sekretaris::before {
+  content: none;
+}
+
+.spkn-struktur__card--sekretaris:hover {
+  background: rgba(109, 91, 245, 0.2);
+}
+
+.spkn-struktur__card--sekretaris .spkn-struktur__avatar--sm {
+  background: rgba(139, 124, 246, 0.25);
+  color: var(--spkn-indigo-600);
+}
+
+.spkn-struktur__card--sekretaris .spkn-struktur__card-jabatan {
+  color: var(--spkn-indigo-600);
+}
+
+/* Baris Anggota Panitia Kerja: banyak orang (15), jadi wrap ke beberapa
+   baris alih-alih 1 baris scroll horizontal seperti Dewan Konsultatif. */
+.spkn-struktur__row--wrap {
+  flex-wrap: wrap;
+  justify-content: center;
+  row-gap: 28px;
+}
+
+.spkn-struktur__row--wrap::before {
+  content: none;
+}
+
+.spkn-struktur__row--wrap .spkn-struktur__card::before {
+  content: none;
+}
+
+@media (max-width: 767.98px) {
+  .spkn-struktur__fork-branch { margin-left: calc(50% + 24px); }
+  .spkn-struktur__fork-branch::before { width: 24px; }
+}
+
 @media (max-width: 575.98px) {
   .spkn-struktur-hero { padding: 120px 16px 32px; }
   .spkn-struktur-hero__card { padding: 28px 24px; }
