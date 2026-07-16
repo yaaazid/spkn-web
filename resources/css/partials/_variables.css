@@ -21,6 +21,10 @@
   --spkn-gold-400: #f7c948;
   --spkn-gold-500: #f5b731;
 
+  /* --- Aksen tambahan untuk icon card (mis. section Unsur Komite) --- */
+  --spkn-teal-500: #3fa08a;
+  --spkn-navy-purple-600: #3d3480;
+
   /* --- Liquid glass --- */
   --glass-bg: rgba(255, 255, 255, 0.55);
   --glass-bg-strong: rgba(255, 255, 255, 0.72);

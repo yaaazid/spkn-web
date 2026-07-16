@@ -1,0 +1,101 @@
+/**
+ * Section "Unsur Komite" (Empat unsur, satu standar) — halaman beranda.
+ */
+
+.spkn-unsur {
+  position: relative;
+  background: #f4f4fb;
+  padding: 96px 20px;
+  border-top: 3px solid var(--spkn-gold-500); /* aksen tipis pemisah dari section sebelumnya */
+}
+
+.spkn-unsur__inner {
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+.spkn-unsur__badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  background: var(--spkn-indigo-tint);
+  color: var(--spkn-indigo-600);
+  font-family: ui-monospace, SFMono-Regular, "JetBrains Mono", Menlo, monospace;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.spkn-unsur__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(28px, 3.2vw, 38px);
+  color: var(--spkn-navy-800);
+  margin: 0 0 20px;
+}
+
+.spkn-unsur__desc {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--spkn-ink-muted);
+  max-width: 640px;
+  margin: 0 0 48px;
+}
+
+.spkn-unsur__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.spkn-unsur__card {
+  background: #fff;
+  border: 1px solid rgba(15, 27, 61, 0.06);
+  border-radius: var(--radius-lg);
+  padding: 28px 24px;
+  box-shadow: 0 1px 3px rgba(15, 27, 61, 0.04);
+}
+
+.spkn-unsur__icon {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 22px;
+  margin-bottom: 20px;
+}
+
+.spkn-unsur__card-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--spkn-navy-800);
+  margin: 0 0 8px;
+}
+
+.spkn-unsur__card-desc {
+  font-family: var(--font-body);
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--spkn-ink-muted);
+  margin: 0;
+}
+
+@media (max-width: 991.98px) {
+  .spkn-unsur__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 575.98px) {
+  .spkn-unsur { padding: 64px 20px; }
+  .spkn-unsur__grid {
+    grid-template-columns: 1fr;
+  }
+}

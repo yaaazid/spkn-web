@@ -4,9 +4,11 @@
 
 @section('content')
     @include('partials.hero.hero', ['stats' => $stats ?? null])
+    @include('partials.home.unsur-komite')
+    @include('partials.home.proses-baku')
 
-    {{-- Section konten lain di bawah hero menyusul di sini,
-         masing-masing sebaiknya jadi partial sendiri, contoh:
-         @include('partials.home.about-preview')
-         @include('partials.home.latest-news') --}}
+    {{-- Section konten lain di bawah menyusul di sini, masing-masing sebagai
+         partial sendiri (1 file = 1 section), contoh:
+         @include('partials.home.latest-news')
+         @include('partials.home.upcoming-agenda') --}}
 @endsection

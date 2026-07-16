@@ -10,32 +10,13 @@
  *   diganti tombol "Menu" yang membuka panel nav-list saat diklik.
  */
 
-/**
- * Navbar — SPKN BPK RI
- *
- * Perilaku scroll (meniru atescape.id):
- * - Di landing (belum discroll): navbar diam, full-width, transparan
- *   (tanpa panel kaca), teks putih supaya kebaca di atas foto hero, semua
- *   menu tampil penuh.
- * - Begitu discroll (class .is-scrolled ditambah JS, lihat navbar-scroll.js):
- *   navbar mengecil jadi pill kaca mengambang, nav-list & search disembunyikan,
- *   diganti tombol "Menu" yang membuka panel nav-list saat diklik.
- *
- * Semua transisi yang ikut berubah bareng .is-scrolled (max-width, opacity
- * chrome, padding/gap content, warna teks) sengaja disamakan durasi & easing-
- * nya lewat variabel di bawah, supaya gerakannya berbarengan satu irama —
- * kalau durasinya beda-beda, tiap elemen "sampai" di waktu berbeda dan
- * kelihatan patah-patah walau masing-masing transisinya sendiri smooth.
- */
-
-:root {
-  --spkn-navbar-transition-duration: .32s;
-  --spkn-navbar-transition-ease: cubic-bezier(0.22, 1, 0.36, 1); /* ease-out, berhenti lembut */
-}
-
 .spkn-navbar-wrap {
-  position: sticky;
+  position: fixed; /* bukan sticky — sticky cuma nempel selagi parent-nya (.spkn-hero)
+                       masih kelihatan; fixed bikin navbar ikut terus sampai akhir halaman
+                       apa pun section yang lagi discroll */
   top: 16px;
+  left: 0;
+  right: 0;
   z-index: 50;
   padding: 0 20px;
 }
@@ -44,19 +25,7 @@
   position: relative;
   max-width: 1440px; /* lebih lebar, pas buat rasio laptop biasa */
   margin: 0 auto;
-  transition: max-width var(--spkn-navbar-transition-duration) var(--spkn-navbar-transition-ease);
-}
-
-/* Ditambahkan JS (navbar-scroll.js) sesaat sebelum & selama pill
-   berubah ukuran besar<->kecil, lewat inline style `width` (bukan
-   max-width) karena transisi ke keyword seperti fit-content tidak
-   dianimasikan mulus oleh browser. Dilepas lagi begitu transisi
-   selesai supaya lebar pill balik "fluid" ngikutin CSS di atas.
-   `will-change` cuma dipasang selama animasi (bukan permanen) supaya
-   browser tidak boros memori mempertahankan compositor layer terus. */
-.spkn-navbar.is-animating-width {
-  transition: width var(--spkn-navbar-transition-duration) var(--spkn-navbar-transition-ease);
-  will-change: width;
+  transition: max-width .25s ease;
 }
 
 /* Saat discroll, pill-nya mengecil ngikutin isi (logo + tombol Menu),
@@ -75,22 +44,23 @@
   z-index: 0;
   pointer-events: none;
   opacity: 0.55;
-  transition: opacity var(--spkn-navbar-transition-duration) var(--spkn-navbar-transition-ease);
+  transition: opacity .25s ease;
 }
 
 .spkn-navbar-wrap.is-scrolled .spkn-navbar__chrome {
   opacity: 1;
-}
-
-/* Selama pill lagi resize, backdrop-filter blur 32px di .glass-pill (lihat
-   _glass.css) itu berat kalau harus dihitung ulang tiap frame bareng
-   perubahan layout — ini penyebab utama animasi kerasa "gersak-gersak".
-   Diringankan sementara (blur lebih kecil) selama transisi berlangsung,
-   lalu balik normal begitu class ini dilepas JS setelah animasi selesai.
-   Bedanya nyaris tidak kelihatan karena cuma ~0.3 detik. */
-.spkn-navbar.is-animating-width .spkn-navbar__chrome {
-  backdrop-filter: blur(10px) saturate(200%) brightness(1.05);
-  -webkit-backdrop-filter: blur(10px) saturate(200%) brightness(1.05);
+  /* Override background .glass-pill supaya lebih tembus pandang di atas
+     latar section yang terang (putih/abu muda) — kalau pakai opacity putih
+     bawaan .glass-pill (.78/.5), di atas bg terang nyaris keliatan solid putih,
+     bukan kaca. */
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.38), rgba(255, 255, 255, 0.2));
+  backdrop-filter: blur(28px) saturate(220%) brightness(1.1);
+  -webkit-backdrop-filter: blur(28px) saturate(220%) brightness(1.1);
+  box-shadow:
+    0 10px 34px rgba(15, 27, 61, 0.14),
+    0 1px 3px rgba(15, 27, 61, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.25);
 }
 
 .spkn-navbar__content {
@@ -101,8 +71,7 @@
   justify-content: space-between;
   gap: 16px;
   padding: 14px 12px 14px 16px;
-  transition: padding var(--spkn-navbar-transition-duration) var(--spkn-navbar-transition-ease),
-              gap var(--spkn-navbar-transition-duration) var(--spkn-navbar-transition-ease);
+  transition: padding .25s ease;
 }
 
 .spkn-navbar-wrap.is-scrolled .spkn-navbar__content {
@@ -152,18 +121,6 @@
   list-style: none;
   margin: 0;
   padding: 0;
-  transition: opacity .14s ease;
-}
-
-/* Ditambahkan JS (navbar-scroll.js) sesaat SEBELUM konten ditukar (nav-list/
-   search <-> tombol Menu) waktu status scroll berubah, supaya konten lama
-   fade-out dulu baru pill-nya di-resize — bukan langsung "kedip" hilang
-   bareng resize seperti sebelumnya. Dipasang juga sesaat ke konten baru
-   sebelum tampil, lalu dilepas 2 frame kemudian supaya fade-in kelihatan. */
-.spkn-nav-list.is-crossfade-out,
-.spkn-nav-actions.is-crossfade-out,
-.spkn-menu-toggle.is-crossfade-out {
-  opacity: 0;
 }
 
 .spkn-nav-link {
@@ -220,7 +177,6 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  transition: opacity .14s ease;
 }
 
 .spkn-icon-btn {
@@ -257,7 +213,7 @@
   font-weight: 600;
   font-size: 14px;
   cursor: pointer;
-  transition: color .25s ease, background-color .18s ease, opacity .14s ease;
+  transition: color .25s ease, background-color .18s ease;
 }
 
 .spkn-navbar-wrap.is-scrolled .spkn-menu-toggle {
@@ -273,7 +229,7 @@
 }
 
 .spkn-navbar-wrap.is-scrolled .spkn-menu-toggle,
-.spkn-navbar.is-menu-open .spkn-menu-toggle {
+.spkn-navbar-root.is-menu-open .spkn-menu-toggle {
   display: inline-flex;
 }
 
@@ -283,26 +239,122 @@
   display: none;
 }
 
-/* --- Panel nav-list saat tombol "Menu" diklik (mode ramping/mobile) ---
-   Nav-list yang sama dipakai ulang, cuma disusun ulang jadi panel vertikal
-   lewat class .is-menu-open di JS (navbar-scroll.js) */
-.spkn-navbar.is-menu-open .spkn-nav-list {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 4px;
-  position: absolute;
-  top: calc(100% + 12px);
-  left: 0;
-  right: 0;
-  padding: 12px;
-  z-index: 5;
+/* --- Off-canvas menu (meniru atescape.id) ---
+   Saat tombol "Menu" diklik, class .is-menu-open ditambah ke .spkn-navbar-root
+   (lihat navbar-scroll.js). Backdrop gelap + panel sidebar slide dari kiri. */
+
+.spkn-offcanvas-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(11, 18, 41, 0.6);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .4s ease, visibility .4s;
+  z-index: 60;
 }
 
-.spkn-navbar.is-menu-open .spkn-nav-list .spkn-nav-link {
-  color: var(--spkn-ink);
+.spkn-navbar-root.is-menu-open .spkn-offcanvas-backdrop {
+  opacity: 1;
+  visibility: visible;
+}
+
+.spkn-offcanvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 320px;
+  max-width: 85vw;
+  padding: 32px 28px;
+  background: var(--spkn-navy-950);
+  color: #fff;
+  z-index: 61;
+  overflow-y: auto;
+  transform: translateX(-100%);
+  transition: transform .45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.spkn-navbar-root.is-menu-open .spkn-offcanvas {
+  transform: translateX(0);
+}
+
+.spkn-offcanvas__brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 15px;
+  margin-bottom: 36px;
+}
+
+.spkn-offcanvas__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.spkn-offcanvas__link {
+  display: flex;
+  align-items: center;
   justify-content: space-between;
   width: 100%;
+  padding: 14px 4px;
+  border: none;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.75);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 22px;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.spkn-offcanvas__link.is-active,
+.spkn-offcanvas__link:hover {
+  color: #fff;
+}
+
+.spkn-offcanvas__link--toggle i {
+  font-size: 16px;
+  transition: transform .25s ease;
+}
+
+.spkn-offcanvas__group.is-open .spkn-offcanvas__link--toggle i {
+  transform: rotate(180deg);
+}
+
+.spkn-offcanvas__submenu {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .3s ease;
+}
+
+.spkn-offcanvas__group.is-open .spkn-offcanvas__submenu {
+  max-height: 600px; /* cukup buat submenu terpanjang (Produk dan Referensi) */
+}
+
+.spkn-offcanvas__sublink {
+  padding: 10px 4px 10px 14px;
+  color: rgba(255, 255, 255, 0.55);
+  font-family: var(--font-body);
+  font-size: 14.5px;
+  text-decoration: none;
+  border-left: 2px solid rgba(255, 255, 255, 0.15);
+}
+
+.spkn-offcanvas__sublink:hover {
+  color: #fff;
+  border-left-color: var(--spkn-violet-400);
 }
 
 /* --- Dropdown (mega menu) --- */
@@ -443,5 +495,4 @@
   .spkn-nav-actions { display: none; }
   .spkn-menu-toggle { display: inline-flex; color: #fff; }
   .spkn-navbar-wrap.is-scrolled .spkn-menu-toggle { color: var(--spkn-ink); }
-  .spkn-navbar.is-menu-open .spkn-nav-list { display: flex; }
 }

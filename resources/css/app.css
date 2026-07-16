@@ -7,5 +7,5 @@
 @import "./partials/_glass.css";
 @import "./partials/_navbar.css";
 @import "./partials/_hero.css";
-
-html::-webkit-scrollbar{display:none}
+@import "./partials/_unsur-komite.css";
+@import "./partials/_proses-baku.css";

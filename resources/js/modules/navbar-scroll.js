@@ -1,101 +1,58 @@
 /**
- * Navbar scroll-compact + tombol "Menu".
+ * Navbar scroll-compact + tombol "Menu" (off-canvas ala atescape.id).
  * Dipanggil sekali dari resources/js/app.js -> initNavbarScroll()
  *
- * Perilaku (meniru atescape.id):
+ * Perilaku:
  * - Landing (scrollY <= SCROLL_THRESHOLD): navbar diam, transparan, semua
  *   menu tampil penuh.
  * - Discroll (scrollY > SCROLL_THRESHOLD): class .is-scrolled ditambah ke
  *   .spkn-navbar-wrap -> lewat CSS, navbar mengecil jadi pill kaca,
  *   nav-list & search disembunyikan, digantikan tombol "Menu".
- * - Tombol "Menu" diklik -> class .is-menu-open ditambah ke .spkn-navbar,
- *   CSS menampilkan lagi nav-list sebagai panel vertikal di bawah pill.
+ * - Tombol "Menu" diklik -> class .is-menu-open ditambah ke .spkn-navbar-root
+ *   -> off-canvas sidebar gelap slide dari kiri (CSS), ikon Menu berubah jadi X,
+ *   body dikunci supaya tidak ikut scroll di belakang panel.
+ * - Item dropdown di dalam off-canvas (mis. "Tentang Kami") jadi accordion,
+ *   diklik buka/tutup submenu-nya sendiri.
  *
- * Sengaja dipisah dari navbar-dropdown.js (yang mengurus dropdown/flyout)
- * supaya dua concern ini tidak saling tabrakan kalau salah satunya diubah.
+ * Sengaja dipisah dari navbar-dropdown.js (yang ngurus dropdown/flyout versi
+ * desktop) supaya dua concern ini tidak saling tabrakan.
  */
 const SCROLL_THRESHOLD = 60; // px
-const WIDTH_TRANSITION_MS = 320; // durasi animasi resize pill, sinkron dgn CSS .is-animating-width
 
 export function initNavbarScroll(root = document) {
   const wrap = root.querySelector(".spkn-navbar-wrap");
-  const navbar = root.querySelector(".spkn-navbar");
+  const navRoot = root.querySelector("[data-navbar-root]");
   const menuToggle = root.querySelector("[data-menu-toggle]");
+  const menuToggleIcon = root.querySelector("[data-menu-toggle-icon]");
+  const backdrop = root.querySelector("[data-offcanvas-backdrop]");
 
-  if (!wrap || !navbar) return;
+  if (!wrap || !navRoot) return;
 
-  const prefersReducedMotion = window.matchMedia(
-    "(prefers-reduced-motion: reduce)"
-  ).matches;
-
-  const closeMenuPanel = () => {
-    navbar.classList.remove("is-menu-open");
-    menuToggle?.setAttribute("aria-expanded", "false");
+  const setMenuIcon = (isOpen) => {
+    menuToggleIcon?.classList.toggle("bi-list", !isOpen);
+    menuToggleIcon?.classList.toggle("bi-x-lg", isOpen);
   };
 
-  /**
-   * Animasi lebar pill navbar pakai teknik FLIP (measure sebelum & sesudah,
-   * lalu tween lewat inline style `width`).
-   *
-   * Ini diperlukan karena `applyStateChange` mengubah class .is-scrolled,
-   * yang lewat CSS mengganti `max-width` pill dari nilai px tetap ke
-   * keyword `fit-content` (dan sebaliknya). Browser TIDAK menganimasikan
-   * transisi ke/dari keyword seperti `fit-content`/`auto` secara mulus —
-   * nilainya langsung "melompat" ke ukuran akhir. Makanya lebar awal &
-   * akhir diukur manual di sini, lalu di-tween lewat `width` (angka px
-   * murni) yang bisa dianimasikan browser mana pun.
-   */
-  const animateWidthChange = (applyStateChange) => {
-    if (prefersReducedMotion) {
-      applyStateChange();
-      return;
-    }
+  const closeMenuPanel = () => {
+    navRoot.classList.remove("is-menu-open");
+    menuToggle?.setAttribute("aria-expanded", "false");
+    document.body.style.overflow = "";
+    setMenuIcon(false);
+  };
 
-    const startWidth = navbar.getBoundingClientRect().width;
-
-    applyStateChange();
-
-    const endWidth = navbar.getBoundingClientRect().width;
-
-    if (Math.abs(endWidth - startWidth) < 1) return;
-
-    // Kunci ke lebar awal dulu tanpa transisi...
-    navbar.classList.remove("is-animating-width");
-    navbar.style.width = `${startWidth}px`;
-    void navbar.offsetWidth; // paksa reflow supaya lebar awal ke-"commit"
-
-    // ...baru nyalakan transisi & tuju ke lebar akhir di frame berikutnya.
-    requestAnimationFrame(() => {
-      navbar.classList.add("is-animating-width");
-      navbar.style.width = `${endWidth}px`;
-    });
-
-    const cleanup = (event) => {
-      if (event && (event.target !== navbar || event.propertyName !== "width")) {
-        return;
-      }
-      navbar.style.width = "";
-      navbar.classList.remove("is-animating-width");
-      navbar.removeEventListener("transitionend", cleanup);
-    };
-
-    navbar.addEventListener("transitionend", cleanup);
-    // Jaring pengaman kalau transitionend tidak pernah ke-trigger.
-    window.setTimeout(cleanup, WIDTH_TRANSITION_MS + 80);
+  const openMenuPanel = () => {
+    navRoot.classList.add("is-menu-open");
+    menuToggle?.setAttribute("aria-expanded", "true");
+    document.body.style.overflow = "hidden"; // kunci scroll belakang off-canvas
+    setMenuIcon(true);
   };
 
   const updateScrollState = () => {
     const isScrolled = window.scrollY > SCROLL_THRESHOLD;
+    wrap.classList.toggle("is-scrolled", isScrolled);
 
-    // Tidak ada perubahan state -> jangan animasikan (mis. tiap event scroll biasa)
-    if (wrap.classList.contains("is-scrolled") === isScrolled) return;
-
-    animateWidthChange(() => {
-      wrap.classList.toggle("is-scrolled", isScrolled);
-    });
-
-    // Balik ke atas (bukan mode ramping lagi di desktop) -> tutup panel
-    // menu kalau kebetulan lagi kebuka, biar tidak nyangkut.
+    // Balik ke atas (bukan mode ramping lagi di desktop) -> tutup off-canvas
+    // kalau kebetulan lagi kebuka, biar tidak nyangkut.
     if (!isScrolled) closeMenuPanel();
   };
 
@@ -104,16 +61,19 @@ export function initNavbarScroll(root = document) {
 
   menuToggle?.addEventListener("click", (event) => {
     event.stopPropagation();
-    const willOpen = !navbar.classList.contains("is-menu-open");
-    navbar.classList.toggle("is-menu-open", willOpen);
-    menuToggle.setAttribute("aria-expanded", String(willOpen));
+    navRoot.classList.contains("is-menu-open") ? closeMenuPanel() : openMenuPanel();
   });
 
-  document.addEventListener("click", (event) => {
-    if (!navbar.contains(event.target)) closeMenuPanel();
-  });
+  backdrop?.addEventListener("click", closeMenuPanel);
 
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") closeMenuPanel();
+  });
+
+  // --- Accordion untuk item dropdown di dalam off-canvas ---
+  root.querySelectorAll("[data-offcanvas-group-trigger]").forEach((trigger) => {
+    trigger.addEventListener("click", () => {
+      trigger.closest("[data-offcanvas-group]")?.classList.toggle("is-open");
+    });
   });
 }

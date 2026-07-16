@@ -2,8 +2,6 @@
     class="spkn-hero"
     style="background-image: url('{{ asset('assets/images/pemimpin.png') }}');"
 >
-    @include('partials.navbar.navbar')
-
     <div class="spkn-hero__inner">
         <div class="spkn-hero__content">
             <h1 class="spkn-hero__title">
