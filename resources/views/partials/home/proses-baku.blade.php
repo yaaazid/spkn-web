@@ -29,20 +29,20 @@
 
 <section class="spkn-proses-section">
     <div class="spkn-proses">
-        <span class="spkn-proses__badge">
+        <span class="spkn-proses__badge reveal">
             <i class="bi bi-file-earmark-text" aria-hidden="true"></i>
             Apa yang Kami Kerjakan
         </span>
 
-        <h2 class="spkn-proses__title">Delapan tahapan proses baku</h2>
+        <h2 class="spkn-proses__title reveal">Delapan tahapan proses baku</h2>
 
-        <p class="spkn-proses__desc">
+        <p class="spkn-proses__desc reveal">
             Komite SPKN telah menyusun Draf Eksposur (DE) Revisi SPKN Tahun 2022
             sebagai penyempurnaan SPKN 2017 melalui delapan tahapan proses baku.
             Setiap tahap dicentang begitu selesai.
         </p>
 
-        <div class="spkn-proses__scroller" data-proses-scroller>
+        <div class="spkn-proses__scroller reveal" data-proses-scroller>
             <div class="spkn-proses__track">
                 @foreach ($tahapanProsesBaku as $i => $tahap)
                     @php $meta = $statusMeta[$tahap['status']]; @endphp

@@ -46,12 +46,12 @@
 
 <section class="spkn-buku">
     <div class="spkn-buku__inner">
-        <span class="spkn-buku__badge">Dokumentasi</span>
-        <h2 class="spkn-buku__title">Buku Cetakan Publikasi</h2>
+        <span class="spkn-buku__badge reveal">Dokumentasi</span>
+        <h2 class="spkn-buku__title reveal">Buku Cetakan Publikasi</h2>
 
         <div class="spkn-buku__grid">
             @foreach ($bukuCetakan as $buku)
-                <a href="{{ $buku['href'] ?? '#' }}" class="spkn-buku__card">
+                <a href="{{ $buku['href'] ?? '#' }}" class="spkn-buku__card reveal">
                     @if (!empty($buku['image']))
                         <img
                             src="{{ $buku['image'] }}"

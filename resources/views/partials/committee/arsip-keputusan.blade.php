@@ -44,14 +44,14 @@
 
 <section class="spkn-arsip">
     <div class="spkn-arsip__inner">
-        <span class="spkn-arsip__badge">Arsip Keputusan</span>
-        <h2 class="spkn-arsip__title">Keputusan BPK tentang Komite SPKN</h2>
-        <p class="spkn-arsip__desc">
+        <span class="spkn-arsip__badge reveal">Arsip Keputusan</span>
+        <h2 class="spkn-arsip__title reveal">Keputusan BPK tentang Komite SPKN</h2>
+        <p class="spkn-arsip__desc reveal">
             Rangkaian empat belas Keputusan Ketua BPK terkait pembentukan Komite
             SPKN dari tahun 2011 hingga 2023.
         </p>
 
-        <div class="spkn-arsip__card">
+        <div class="spkn-arsip__card reveal">
             @foreach ($keputusanBpk as $sk)
                 <div class="spkn-arsip__row {{ !empty($sk['highlight']) ? 'is-highlight' : '' }}">
                     <span class="spkn-arsip__num">{{ $sk['nomor'] }}</span>
@@ -64,7 +64,7 @@
             @endforeach
         </div>
 
-        <div class="spkn-arsip__note">
+        <div class="spkn-arsip__note reveal">
             <i class="bi bi-info-circle-fill" aria-hidden="true"></i>
             <p>{{ $catatanArsip }}</p>
         </div>

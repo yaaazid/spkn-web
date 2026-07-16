@@ -10,10 +10,10 @@
 --}}
 <section class="spkn-latar">
     <div class="spkn-latar__inner">
-        <span class="spkn-latar__badge">Latar Belakang</span>
-        <h2 class="spkn-latar__title">Pembentukan Komite SPKN 2010</h2>
+        <span class="spkn-latar__badge reveal">Latar Belakang</span>
+        <h2 class="spkn-latar__title reveal">Pembentukan Komite SPKN 2010</h2>
 
-        <div class="spkn-latar__card">
+        <div class="spkn-latar__card reveal">
             <p>
                 Komite Standar Pemeriksaan Keuangan Negara (SPKN) pertama kali dibentuk
                 pada tahun 2010 berdasarkan Keputusan BPK No 4/K/I-XIII.2/7/2010 tanggal
