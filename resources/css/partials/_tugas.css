@@ -1,0 +1,163 @@
+/**
+ * Halaman "Tugas" (Tentang Kami > Tugas).
+ *
+ * Hero-nya beda dari page-header polos halaman Tentang Kami lain: 2 kolom
+ * (teks + gambar), jadi style-nya dipisah dari _page-header.css. Badge pakai
+ * varian teal (bukan indigo seperti section lain) sesuai referensi desain --
+ * warna token-nya sudah ada di _variables.css (--spkn-teal-500), tinggal
+ * dipakai versi tint-nya di sini.
+ *
+ * Kartu gambar kanan pakai fallback CSS (gradient + ikon) selama belum ada
+ * foto asli, sama polanya dengan .spkn-buku__cover di _buku-cetakan.css.
+ */
+
+.spkn-tugas-hero {
+  padding: 160px 20px 96px;
+  background: #f4f4fb; /* satu keluarga dengan _page-header.css & _unsur-komite.css */
+  overflow: hidden;
+}
+
+.spkn-tugas-hero__inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 64px;
+  align-items: center;
+}
+
+/* --- Kolom kiri: badge + judul + deskripsi + stat --- */
+
+.spkn-tugas-hero__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  background: rgba(63, 160, 138, 0.12); /* tint dari --spkn-teal-500 */
+  color: var(--spkn-teal-500);
+  font-family: ui-monospace, SFMono-Regular, "JetBrains Mono", Menlo, monospace;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+}
+
+.spkn-tugas-hero__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(32px, 4vw, 48px);
+  line-height: 1.15;
+  color: var(--spkn-navy-800);
+  margin: 0 0 24px;
+}
+
+.spkn-tugas-hero__desc {
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.75;
+  color: var(--spkn-ink-muted);
+  max-width: 46ch;
+  margin: 0 0 40px;
+}
+
+.spkn-tugas-hero__stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+/* --- Kolom kanan: foto (atau fallback) + kartu overlay --- */
+
+.spkn-tugas-hero__visual {
+  position: relative;
+}
+
+.spkn-tugas-hero__frame {
+  position: relative;
+  border-radius: 28px;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  box-shadow: 0 20px 50px rgba(15, 27, 61, 0.16);
+}
+
+.spkn-tugas-hero__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.spkn-tugas-hero__placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(160deg, #4fa3e8 0%, #2f6fd6 55%, #1b4fb0 100%);
+}
+
+.spkn-tugas-hero__placeholder i {
+  font-size: 72px;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.spkn-tugas-hero__card {
+  position: absolute;
+  left: -32px;
+  bottom: -32px;
+  max-width: 300px;
+  background: #fff;
+  border-radius: var(--radius-lg);
+  padding: 24px 26px;
+  box-shadow: 0 16px 40px rgba(15, 27, 61, 0.14);
+}
+
+.spkn-tugas-hero__card-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 17px;
+  color: var(--spkn-navy-800);
+  margin: 0 0 8px;
+}
+
+.spkn-tugas-hero__card-desc {
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--spkn-ink-muted);
+  margin: 0;
+}
+
+@media (max-width: 991.98px) {
+  .spkn-tugas-hero__inner {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+
+  .spkn-tugas-hero__visual {
+    order: -1;
+  }
+
+  .spkn-tugas-hero__card {
+    left: 20px;
+    bottom: -24px;
+    max-width: calc(100% - 40px);
+  }
+}
+
+@media (max-width: 575.98px) {
+  .spkn-tugas-hero {
+    padding: 140px 16px 72px;
+  }
+
+  .spkn-tugas-hero__stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .spkn-tugas-hero__card {
+    position: static;
+    margin-top: 40px;
+  }
+}

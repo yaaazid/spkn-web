@@ -16,5 +16,7 @@
 @import "./partials/_struktur-komite.css";
 @import "./partials/_buku-cetakan.css";
 @import "./partials/_latar-belakang.css";
+@import "./partials/_tugas.css";
+@import "./partials/_rincian-tugas.css";
 @import "./partials/_arsip-keputusan.css";
 @import "./partials/_footer.css";
