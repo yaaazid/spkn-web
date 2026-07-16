@@ -65,7 +65,6 @@
   scrollbar-width: none; /* scrollbar asli disembunyikan, dipakai custom bar di bawah */
   margin: 0 -8px 16px;
   padding: 4px 8px;
-  cursor: grab; /* kasih tau mouse-user bisa klik-tahan lalu geser */
 }
 
 .spkn-proses__scroller::-webkit-scrollbar {
@@ -73,7 +72,6 @@
 }
 
 .spkn-proses__scroller.is-dragging {
-  cursor: grabbing;
   scroll-behavior: auto; /* nonaktifkan smooth-scroll saat drag biar tidak lag ikut mouse */
   user-select: none; /* cegah teks kartu ke-select saat mouse ditarik */
 }
@@ -195,12 +193,10 @@
   border-radius: var(--radius-pill);
   background: linear-gradient(135deg, var(--spkn-indigo-500), var(--spkn-violet-400));
   transition: transform .1s linear;
-  cursor: grab; /* bisa diklik-tahan lalu digeser */
 }
 
 .spkn-proses__scrollbar-thumb:active,
 .spkn-proses__scrollbar-thumb.is-dragging {
-  cursor: grabbing;
   transition: none; /* nonaktifkan transisi saat drag biar mengikuti mouse persis, tidak lag */
 }
 
