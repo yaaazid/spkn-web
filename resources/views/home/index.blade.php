@@ -6,6 +6,7 @@
     @include('partials.hero.hero', ['stats' => $stats ?? null])
     @include('partials.home.unsur-komite')
     @include('partials.home.proses-baku')
+    @include('partials.home.berita-spkn')
 
     {{-- Section konten lain di bawah menyusul di sini, masing-masing sebagai
          partial sendiri (1 file = 1 section), contoh:

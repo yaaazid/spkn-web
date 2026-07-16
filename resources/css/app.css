@@ -4,13 +4,16 @@
 @import "bootstrap-icons/font/bootstrap-icons.css";
 
 @import "./partials/_variables.css";
-@import "./partials/_glass.css";
 @import "./partials/_animations.css";
+@import "./partials/_glass.css";
+
 @import "./partials/_navbar.css";
 @import "./partials/_hero.css";
+@import "./partials/_page-header.css";
 @import "./partials/_unsur-komite.css";
 @import "./partials/_proses-baku.css";
-@import "./partials/_page-header.css";
+@import "./partials/_berita-spkn.css";
+@import "./partials/_struktur-komite.css";
 @import "./partials/_buku-cetakan.css";
 @import "./partials/_latar-belakang.css";
 @import "./partials/_arsip-keputusan.css";

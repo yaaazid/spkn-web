@@ -1,0 +1,390 @@
+/**
+ * Halaman "Struktur Komite SPKN" (Dewan Konsultatif, Panitia Kerja, dst.)
+ * — /tentang/struktur-komite dan /tentang/struktur-komite/{param}
+ */
+
+/* --- Hero card --- */
+.spkn-struktur-hero {
+  background: #f4f4fb;
+  padding: 140px 20px 40px; /* padding-top ekstra: navbar-nya fixed/overlay */
+}
+
+.spkn-struktur-hero__inner {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.spkn-struktur-hero__card {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  padding: 40px 44px;
+  box-shadow: 0 1px 3px rgba(15, 27, 61, 0.06);
+}
+
+.spkn-struktur-hero__badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  background: rgba(63, 160, 138, 0.14);
+  color: var(--spkn-teal-500);
+  font-family: ui-monospace, SFMono-Regular, "JetBrains Mono", Menlo, monospace;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.spkn-struktur-hero__title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(32px, 4vw, 44px);
+  color: var(--spkn-navy-800);
+  margin: 0 0 16px;
+}
+
+.spkn-struktur-hero__desc {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--spkn-ink-muted);
+  max-width: 640px;
+  margin: 0;
+}
+
+/* --- Panel bagan --- */
+.spkn-struktur {
+  background: #f4f4fb;
+  padding: 32px 20px 96px;
+}
+
+.spkn-struktur__inner {
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+.spkn-struktur__panel {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  padding: 32px 32px 48px;
+  box-shadow: 0 1px 3px rgba(15, 27, 61, 0.06);
+  overflow-x: auto;
+}
+
+.spkn-struktur__panel-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.spkn-struktur__panel-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 22px;
+  color: var(--spkn-navy-800);
+  margin: 0 0 10px;
+}
+
+.spkn-struktur__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--spkn-ink-muted);
+}
+
+.spkn-struktur__legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.spkn-struktur__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.spkn-struktur__dot--ketua   { background: var(--spkn-navy-800); }
+.spkn-struktur__dot--wakil   { background: var(--spkn-gold-500); }
+.spkn-struktur__dot--anggota { background: var(--spkn-teal-500); }
+
+.spkn-struktur__download {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  border-radius: var(--radius-pill);
+  padding: 12px 20px;
+  background: var(--spkn-navy-800);
+  color: #fff;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 14px;
+  transition: transform .2s ease, box-shadow .2s ease, opacity .2s ease;
+}
+
+.spkn-struktur__download:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(15, 27, 61, 0.25);
+}
+
+.spkn-struktur__download:disabled {
+  opacity: .6;
+  cursor: progress;
+  transform: none;
+}
+
+.spkn-struktur__empty {
+  font-family: var(--font-body);
+  color: var(--spkn-ink-muted);
+  text-align: center;
+  padding: 48px 0;
+}
+
+/* --- Bagan (org chart) --- */
+.spkn-struktur__chart {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 760px; /* biar 7 kartu anggota muat berjajar, sisanya scroll horizontal */
+  padding: 8px 0 0;
+}
+
+.spkn-struktur__level {
+  display: flex;
+  justify-content: center;
+}
+
+.spkn-struktur__connector-v {
+  width: 2px;
+  height: 32px;
+  background: rgba(15, 27, 61, 0.15);
+}
+
+.spkn-struktur__node {
+  width: 260px;
+  border: none;
+  border-radius: var(--radius-lg);
+  padding: 24px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.spkn-struktur__node:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 30px rgba(15, 27, 61, 0.18);
+}
+
+.spkn-struktur__node--ketua {
+  background: var(--spkn-navy-800);
+  color: #fff;
+}
+
+.spkn-struktur__node--wakil {
+  background: linear-gradient(135deg, var(--spkn-gold-400), var(--spkn-gold-500));
+  color: var(--spkn-navy-800);
+}
+
+.spkn-struktur__node-jabatan {
+  display: block;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 11.5px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  opacity: .85;
+  margin-top: 12px;
+}
+
+.spkn-struktur__node-nama {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 18px;
+  margin-top: 4px;
+}
+
+.spkn-struktur__node-hint {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 12px;
+  opacity: .7;
+  margin-top: 8px;
+}
+
+.spkn-struktur__branch-label {
+  font-family: ui-monospace, SFMono-Regular, "JetBrains Mono", Menlo, monospace;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--spkn-ink-muted);
+  margin-bottom: 24px;
+}
+
+.spkn-struktur__row {
+  position: relative;
+  display: flex;
+  gap: 18px;
+  padding-top: 24px;
+}
+
+/* Garis cabang horizontal, dari tengah kartu pertama sampai kartu terakhir */
+.spkn-struktur__row::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: calc(260px / 2 + 9px); /* setengah lebar kartu pertama (perkiraan) */
+  right: calc(260px / 2 + 9px);
+  height: 2px;
+  background: rgba(15, 27, 61, 0.15);
+}
+
+.spkn-struktur__card {
+  position: relative;
+  flex: 1 0 150px;
+  max-width: 190px;
+  background: #eef2fb;
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 20px 14px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+}
+
+.spkn-struktur__card::before {
+  content: "";
+  position: absolute;
+  top: -24px;
+  left: 50%;
+  width: 2px;
+  height: 24px;
+  background: rgba(15, 27, 61, 0.15);
+  transform: translateX(-50%);
+}
+
+.spkn-struktur__card:hover {
+  background: #e2e8f9;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 22px rgba(15, 27, 61, 0.1);
+}
+
+.spkn-struktur__card-jabatan {
+  display: block;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  color: var(--spkn-teal-500);
+  margin-top: 10px;
+}
+
+.spkn-struktur__card-nama {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--spkn-navy-800);
+  margin-top: 4px;
+  line-height: 1.35;
+}
+
+/* --- Avatar placeholder (belum ada foto asli) --- */
+.spkn-struktur__avatar {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+  font-size: 28px;
+}
+
+.spkn-struktur__node--wakil .spkn-struktur__avatar {
+  background: rgba(15, 27, 61, 0.12);
+}
+
+.spkn-struktur__card .spkn-struktur__avatar--sm {
+  width: 48px;
+  height: 48px;
+  font-size: 20px;
+  background: rgba(109, 91, 245, 0.12);
+  color: var(--spkn-indigo-500);
+}
+
+.spkn-struktur__avatar--lg {
+  width: 88px;
+  height: 88px;
+  font-size: 36px;
+  background: var(--spkn-indigo-tint);
+  color: var(--spkn-indigo-500);
+  margin-bottom: 16px;
+}
+
+/* --- Modal profil ringkas --- */
+.spkn-struktur__modal {
+  border-radius: var(--radius-lg);
+  border: none;
+}
+
+.spkn-struktur__tag {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  background: var(--spkn-indigo-tint);
+  color: var(--spkn-indigo-600);
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.spkn-struktur__modal-nama {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 22px;
+  color: var(--spkn-navy-800);
+  margin: 0 0 12px;
+}
+
+.spkn-struktur__modal-note {
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--spkn-ink-muted);
+  margin: 0 0 20px;
+}
+
+.spkn-struktur__modal-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--spkn-indigo-600);
+  text-decoration: none;
+  padding-bottom: 24px;
+}
+
+.spkn-struktur__modal-link:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 575.98px) {
+  .spkn-struktur-hero { padding: 120px 16px 32px; }
+  .spkn-struktur-hero__card { padding: 28px 24px; }
+  .spkn-struktur__panel { padding: 24px 16px 32px; }
+}
