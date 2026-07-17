@@ -36,8 +36,8 @@
   gap: 6px;
   padding: 6px 14px;
   border-radius: var(--radius-pill);
-  background: var(--spkn-indigo-tint);
-  color: var(--spkn-indigo-600);
+  background: var(--spkn-gold-tint);
+  color: var(--spkn-gold-700);
   font-family: ui-monospace, SFMono-Regular, "JetBrains Mono", Menlo, monospace;
   font-size: 12px;
   font-weight: 700;
@@ -51,7 +51,7 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: var(--spkn-indigo-500);
+  background: var(--spkn-gold-600);
 }
 
 .spkn-page-header__title {

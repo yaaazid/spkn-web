@@ -19,8 +19,8 @@
   align-items: center;
   padding: 6px 14px;
   border-radius: var(--radius-pill);
-  background: var(--spkn-indigo-tint);
-  color: var(--spkn-indigo-600);
+  background: var(--spkn-gold-tint);
+  color: var(--spkn-gold-700);
   font-family: ui-monospace, SFMono-Regular, "JetBrains Mono", Menlo, monospace;
   font-size: 12px;
   font-weight: 700;
@@ -71,10 +71,10 @@
   margin-bottom: 20px;
 }
 
-.spkn-unsur__icon--indigo { background: var(--spkn-indigo-500); }
+.spkn-unsur__icon--indigo { background: var(--spkn-gold-600); }
 .spkn-unsur__icon--gold   { background: var(--spkn-gold-500); }
 .spkn-unsur__icon--teal   { background: var(--spkn-teal-500); }
-.spkn-unsur__icon--purple { background: var(--spkn-navy-purple-600); }
+.spkn-unsur__icon--purple { background: var(--spkn-bronze-700); }
 
 .spkn-unsur__card-title {
   font-family: var(--font-display);

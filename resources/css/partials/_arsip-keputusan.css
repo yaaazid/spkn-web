@@ -19,8 +19,8 @@
   align-items: center;
   padding: 6px 14px;
   border-radius: var(--radius-pill);
-  background: var(--spkn-indigo-tint);
-  color: var(--spkn-indigo-600);
+  background: var(--spkn-gold-tint);
+  color: var(--spkn-gold-700);
   font-family: ui-monospace, SFMono-Regular, "JetBrains Mono", Menlo, monospace;
   font-size: 12px;
   font-weight: 700;
@@ -70,7 +70,7 @@
 .spkn-arsip__row:hover {
   margin: 0 -20px;
   padding: 20px;
-  background: var(--spkn-indigo-tint);
+  background: var(--spkn-gold-tint);
   border-bottom-color: transparent;
 }
 
@@ -84,8 +84,8 @@
   font-family: var(--font-display);
   font-weight: 700;
   font-size: 13px;
-  color: var(--spkn-indigo-600);
-  background: var(--spkn-indigo-tint);
+  color: var(--spkn-gold-700);
+  background: var(--spkn-gold-tint);
   width: 30px;
   height: 30px;
   border-radius: 50%;
@@ -129,7 +129,7 @@
   margin: 0 -20px;
   padding: 20px;
   border-radius: var(--radius-md);
-  background: var(--spkn-indigo-tint);
+  background: var(--spkn-gold-tint);
   border-bottom-color: transparent;
 }
 
@@ -146,13 +146,13 @@
   margin-top: 24px;
   padding: 20px 24px;
   border-radius: var(--radius-lg);
-  background: var(--spkn-indigo-tint);
+  background: var(--spkn-gold-tint);
 }
 
 .spkn-arsip__note i {
   flex: none;
   margin-top: 3px;
-  color: var(--spkn-indigo-600);
+  color: var(--spkn-gold-700);
   font-size: 16px;
 }
 

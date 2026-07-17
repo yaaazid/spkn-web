@@ -88,20 +88,20 @@
 }
 
 .spkn-btn-primary {
-  background: linear-gradient(135deg, var(--spkn-indigo-500), var(--spkn-violet-400));
+  background: linear-gradient(135deg, var(--spkn-gold-600), var(--spkn-gold-300));
   color: #fff;
-  box-shadow: 0 8px 22px rgba(109, 91, 245, 0.4);
+  box-shadow: 0 8px 22px rgba(166, 121, 10, 0.4);
 }
 
 .spkn-btn-primary:hover,
 .spkn-btn-primary:focus-visible {
   transform: translateY(-2px);
-  box-shadow: 0 12px 28px rgba(109, 91, 245, 0.55);
+  box-shadow: 0 12px 28px rgba(166, 121, 10, 0.55);
 }
 
 .spkn-btn-primary:active {
   transform: translateY(0);
-  box-shadow: 0 6px 16px rgba(109, 91, 245, 0.4);
+  box-shadow: 0 6px 16px rgba(166, 121, 10, 0.4);
 }
 
 .spkn-btn-outline-glass {

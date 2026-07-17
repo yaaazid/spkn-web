@@ -1,7 +1,8 @@
 /**
  * Design tokens — SPKN BPK RI
- * Palet mengikuti referensi desain: dasar navy gedung BPK, aksen indigo/violet
- * untuk elemen interaktif, dan gold sebagai aksen penekanan (mis. kata "(SPKN)").
+ * Palet mengikuti referensi desain: dasar navy gedung BPK, aksen golden
+ * (dulunya indigo/violet) untuk elemen interaktif, plus gold terang
+ * sebagai aksen penekanan (mis. kata "(SPKN)").
  */
 
 :root {
@@ -11,19 +12,22 @@
   --spkn-ink: #1e2340;
   --spkn-ink-muted: #4b5170;
 
-  /* --- Aksen indigo/violet (tombol aktif, hover, CTA) --- */
-  --spkn-indigo-500: #6d5bf5;
-  --spkn-indigo-600: #5b46f0;
-  --spkn-violet-400: #8b7cf6;
-  --spkn-indigo-tint: rgba(109, 91, 245, 0.12);
+  /* --- Aksen golden utama (tombol aktif, hover, CTA) --- Menggantikan
+     aksen indigo/violet lama; nama variabel lama (--spkn-indigo-500, dst.)
+     sengaja TIDAK dipertahankan sebagai alias supaya tidak ada 2 sumber
+     kebenaran warna -- semua pemakai sudah dipetakan ke token baru ini. */
+  --spkn-gold-600: #a6790a;
+  --spkn-gold-700: #7a5a08;
+  --spkn-gold-300: #e6c878;
+  --spkn-gold-tint: rgba(166, 121, 10, 0.12);
 
-  /* --- Aksen gold (penekanan pada hero & stat) --- */
+  /* --- Aksen gold terang (penekanan pada hero & stat) --- */
   --spkn-gold-400: #f7c948;
   --spkn-gold-500: #f5b731;
 
   /* --- Aksen tambahan untuk icon card (mis. section Unsur Komite) --- */
   --spkn-teal-500: #3fa08a;
-  --spkn-navy-purple-600: #3d3480;
+  --spkn-bronze-700: #6b4e16;
 
   /* --- Liquid glass --- */
   --glass-bg: rgba(255, 255, 255, 0.55);

@@ -330,8 +330,8 @@
   width: 48px;
   height: 48px;
   font-size: 20px;
-  background: rgba(109, 91, 245, 0.12);
-  color: var(--spkn-indigo-500);
+  background: rgba(166, 121, 10, 0.12);
+  color: var(--spkn-gold-600);
   border-color: rgba(15, 27, 61, 0.1);
 }
 
@@ -339,8 +339,8 @@
   width: 88px;
   height: 88px;
   font-size: 36px;
-  background: var(--spkn-indigo-tint);
-  color: var(--spkn-indigo-500);
+  background: var(--spkn-gold-tint);
+  color: var(--spkn-gold-600);
   margin-bottom: 16px;
   border-color: rgba(15, 27, 61, 0.1);
 }
@@ -355,8 +355,8 @@
   display: inline-block;
   padding: 4px 12px;
   border-radius: var(--radius-pill);
-  background: var(--spkn-indigo-tint);
-  color: var(--spkn-indigo-600);
+  background: var(--spkn-gold-tint);
+  color: var(--spkn-gold-700);
   font-family: var(--font-body);
   font-size: 12px;
   font-weight: 700;
@@ -386,7 +386,7 @@
   font-family: var(--font-body);
   font-weight: 700;
   font-size: 14px;
-  color: var(--spkn-indigo-600);
+  color: var(--spkn-gold-700);
   text-decoration: none;
   padding-bottom: 24px;
 }
@@ -399,13 +399,13 @@
    Jawab -> Ketua, lalu Ketua bercabang ke Sekretaris & Anggota. Warnanya
    mengikuti design token yang sudah ada, cuma dipetakan ke jenjang baru:
    navy = Penanggung Jawab, gold = Wakil Penanggung Jawab, teal = Ketua,
-   indigo/violet = Sekretaris & Anggota. */
+   golden = Sekretaris & Anggota. */
 
 .spkn-struktur__dot--jawab       { background: var(--spkn-navy-800); }
 .spkn-struktur__dot--wakil-jawab { background: var(--spkn-gold-500); }
 .spkn-struktur__dot--ketua-pk    { background: var(--spkn-teal-500); }
-.spkn-struktur__dot--anggota-pk  { background: var(--spkn-indigo-500); }
-.spkn-struktur__dot--sekretaris  { background: var(--spkn-violet-400); }
+.spkn-struktur__dot--anggota-pk  { background: var(--spkn-gold-600); }
+.spkn-struktur__dot--sekretaris  { background: var(--spkn-gold-300); }
 
 .spkn-struktur__node--jawab {
   background: var(--spkn-navy-800);
@@ -475,7 +475,7 @@
 }
 
 .spkn-struktur__card--sekretaris {
-  background: var(--spkn-indigo-tint);
+  background: var(--spkn-gold-tint);
   max-width: none;
   width: 100%;
 }
@@ -485,16 +485,16 @@
 }
 
 .spkn-struktur__card--sekretaris:hover {
-  background: rgba(109, 91, 245, 0.2);
+  background: rgba(166, 121, 10, 0.2);
 }
 
 .spkn-struktur__card--sekretaris .spkn-struktur__avatar--sm {
-  background: rgba(139, 124, 246, 0.25);
-  color: var(--spkn-indigo-600);
+  background: rgba(230, 200, 120, 0.25);
+  color: var(--spkn-gold-700);
 }
 
 .spkn-struktur__card--sekretaris .spkn-struktur__card-jabatan {
-  color: var(--spkn-indigo-600);
+  color: var(--spkn-gold-700);
 }
 
 /* Baris Anggota Panitia Kerja: banyak orang (15), jadi wrap ke beberapa

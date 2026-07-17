@@ -3,7 +3,7 @@
  *
  * Hero-nya beda dari page-header polos halaman Tentang Kami lain: 2 kolom
  * (teks + gambar), jadi style-nya dipisah dari _page-header.css. Badge pakai
- * varian teal (bukan indigo seperti section lain) sesuai referensi desain --
+ * varian teal (bukan golden seperti section lain) sesuai referensi desain --
  * warna token-nya sudah ada di _variables.css (--spkn-teal-500), tinggal
  * dipakai versi tint-nya di sini.
  *

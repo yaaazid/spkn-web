@@ -3,7 +3,7 @@
  *
  * Badge dipakai teal, senada dengan badge di tugas-hero.blade.php supaya
  * kedua section di halaman yang sama terasa satu keluarga. Warna aksen tiap
- * unsur (indigo/gold/teal/purple) DISAMAKAN dengan _unsur-komite.css biar
+ * unsur (golden/gold/teal/bronze) DISAMAKAN dengan _unsur-komite.css biar
  * satu unsur = satu warna di seluruh situs, cuma di sini dipakai versi tint
  * (bukan solid fill) karena ikon duduk di dalam kartu putih, bukan di kartu
  * berwarna.
@@ -132,10 +132,10 @@
   font-size: 28px;
 }
 
-.spkn-rincian-tugas__icon--indigo { background: var(--spkn-indigo-tint); color: var(--spkn-indigo-600); }
+.spkn-rincian-tugas__icon--indigo { background: var(--spkn-gold-tint); color: var(--spkn-gold-700); }
 .spkn-rincian-tugas__icon--gold   { background: rgba(245, 183, 49, 0.16); color: #a8790f; }
 .spkn-rincian-tugas__icon--teal   { background: rgba(63, 160, 138, 0.12); color: var(--spkn-teal-500); }
-.spkn-rincian-tugas__icon--purple { background: rgba(61, 52, 128, 0.12); color: var(--spkn-navy-purple-600); }
+.spkn-rincian-tugas__icon--purple { background: rgba(107, 78, 22, 0.12); color: var(--spkn-bronze-700); }
 
 .spkn-rincian-tugas__head-title {
   font-family: var(--font-display);
@@ -180,8 +180,8 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: var(--spkn-indigo-tint);
-  color: var(--spkn-indigo-600);
+  background: var(--spkn-gold-tint);
+  color: var(--spkn-gold-700);
   font-family: ui-monospace, SFMono-Regular, "JetBrains Mono", Menlo, monospace;
   font-weight: 700;
   font-size: 14px;

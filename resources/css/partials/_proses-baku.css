@@ -31,8 +31,8 @@
   gap: 8px;
   padding: 6px 14px;
   border-radius: var(--radius-pill);
-  background: var(--spkn-indigo-tint);
-  color: var(--spkn-indigo-600);
+  background: var(--spkn-gold-tint);
+  color: var(--spkn-gold-700);
   font-family: ui-monospace, SFMono-Regular, "JetBrains Mono", Menlo, monospace;
   font-size: 12px;
   font-weight: 700;
@@ -171,8 +171,8 @@
 }
 
 .spkn-proses__arrow:hover {
-  background: var(--spkn-indigo-tint);
-  color: var(--spkn-indigo-600);
+  background: var(--spkn-gold-tint);
+  color: var(--spkn-gold-700);
 }
 
 .spkn-proses__scrollbar-track {
@@ -191,7 +191,7 @@
   height: 100%;
   width: 62.5%; /* 5/8 kartu terlihat — di-update juga oleh JS biar akurat */
   border-radius: var(--radius-pill);
-  background: linear-gradient(135deg, var(--spkn-indigo-500), var(--spkn-violet-400));
+  background: linear-gradient(135deg, var(--spkn-gold-600), var(--spkn-gold-300));
   transition: transform .1s linear;
 }
 
