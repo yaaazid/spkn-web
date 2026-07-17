@@ -448,6 +448,73 @@
   border-left-color: var(--spkn-gold-300);
 }
 
+/* ── Level bersarang (mis. "Struktur Komite SPKN" -> Dewan Konsultatif dkk) ── */
+
+.spkn-offcanvas__subgroup {
+  border-left: 2px solid rgba(255, 255, 255, 0.15);
+}
+
+.spkn-offcanvas__subrow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 4px 10px 14px;
+  border: none;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+
+.spkn-offcanvas__sublink--main {
+  flex: 1;
+  border-left: none; /* garisnya sudah dipindah ke .spkn-offcanvas__subgroup pembungkus */
+  padding: 0;
+}
+
+.spkn-offcanvas__subtoggle-icon {
+  flex: none;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.55);
+  transition: transform .25s ease, color .25s ease;
+}
+
+.spkn-offcanvas__subrow:hover .spkn-offcanvas__subtoggle-icon,
+.spkn-offcanvas__subrow:hover .spkn-offcanvas__sublink--main {
+  color: #fff;
+}
+
+.spkn-offcanvas__subgroup.is-open .spkn-offcanvas__subtoggle-icon {
+  transform: rotate(180deg);
+}
+
+.spkn-offcanvas__subsubmenu {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .3s ease;
+  padding-left: 14px;
+}
+
+.spkn-offcanvas__subgroup.is-open .spkn-offcanvas__subsubmenu {
+  max-height: 600px;
+}
+
+.spkn-offcanvas__subsublink {
+  padding: 8px 4px;
+  color: rgba(255, 255, 255, 0.42);
+  font-family: var(--font-body);
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.spkn-offcanvas__subsublink:hover {
+  color: #fff;
+}
+
 /* ─── Dropdown (mega menu) ──────────────────────────────────── */
 .spkn-nav-item {
   position: relative;

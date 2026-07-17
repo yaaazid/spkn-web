@@ -100,12 +100,55 @@
                             <div class="spkn-offcanvas__submenu" data-offcanvas-submenu>
                                 @foreach ($item['columns'] as $column)
                                     @foreach ($column['items'] as $sub)
-                                        <a
-                                            href="{{ Route::has($sub['route'] ?? null) ? route($sub['route']) : '#' }}"
-                                            class="spkn-offcanvas__sublink"
-                                        >
-                                            {{ $sub['label'] }}
-                                        </a>
+                                        @php
+                                            $hasChildren = isset($sub['children']);
+                                            $flyoutItems = $hasChildren ? config('navigation.' . $sub['children'], []) : [];
+                                        @endphp
+
+                                        @if (!$hasChildren)
+                                            <a
+                                                href="{{ Route::has($sub['route'] ?? null) ? route($sub['route']) : '#' }}"
+                                                class="spkn-offcanvas__sublink"
+                                            >
+                                                {{ $sub['label'] }}
+                                            </a>
+                                        @else
+                                            {{--
+                                                Sub-item yang punya submenu tingkat dua (mis. "Struktur Komite SPKN"
+                                                -> Dewan Konsultatif/Panitia Kerja/Sekretariat) -- di desktop ini
+                                                muncul sebagai flyout ke samping (x-nav-flyout-panel). Di off-canvas
+                                                mobile, seluruh baris (label + chevron) jadi SATU tombol toggle --
+                                                klik di mana pun di barisnya buka/tutup submenu, BUKAN langsung
+                                                pindah halaman (beda dari sub-item tanpa children di atas, yang
+                                                tetap link biasa) -- pola & data-attribute-nya sama seperti group
+                                                Tentang Kami di atas (data-offcanvas-group /
+                                                data-offcanvas-group-trigger), makanya JS yang sudah ada
+                                                (navbar-scroll.js) otomatis jalan tanpa perlu ditambah.
+                                            --}}
+                                            <div class="spkn-offcanvas__subgroup" data-offcanvas-group>
+                                                <button
+                                                    type="button"
+                                                    class="spkn-offcanvas__subrow"
+                                                    data-offcanvas-group-trigger
+                                                >
+                                                    <span class="spkn-offcanvas__sublink spkn-offcanvas__sublink--main">
+                                                        {{ $sub['label'] }}
+                                                    </span>
+                                                    <i class="bi bi-chevron-down spkn-offcanvas__subtoggle-icon" aria-hidden="true"></i>
+                                                </button>
+
+                                                <div class="spkn-offcanvas__subsubmenu" data-offcanvas-submenu>
+                                                    @foreach ($flyoutItems as $flyout)
+                                                        <a
+                                                            href="{{ Route::has($flyout['route'] ?? null) ? route($flyout['route'], $flyout['param'] ?? null) : '#' }}"
+                                                            class="spkn-offcanvas__subsublink"
+                                                        >
+                                                            {{ $flyout['label'] }}
+                                                        </a>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        @endif
                                     @endforeach
                                 @endforeach
                             </div>
