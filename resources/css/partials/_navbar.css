@@ -511,6 +511,10 @@
   max-height: 380px;
   overflow-y: auto;
   padding: 14px 8px 14px 14px;
+  /* Dipakai sendiri (bukan di-warp glass-panel biasa) supaya warnanya sama
+     solid/opaknya dengan panel dropdown kiri, tidak "lebih tembus" cuma
+     karena kebetulan posisinya di atas foto yang lebih terang. */
+  background: var(--glass-bg-strong);
   opacity: 0;
   visibility: hidden;
   transform: translateX(-6px);

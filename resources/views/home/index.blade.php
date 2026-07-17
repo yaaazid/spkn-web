@@ -5,6 +5,7 @@
 @section('content')
     @include('partials.hero.hero', ['stats' => $stats ?? null])
     @include('partials.home.unsur-komite')
+    @include('partials.home.galeri-momen')
     @include('partials.home.proses-baku')
     @include('partials.home.berita-spkn')
 

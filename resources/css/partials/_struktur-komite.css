@@ -234,7 +234,7 @@
 .spkn-struktur__row {
   position: relative;
   display: flex;
-  gap: 18px;
+  gap: 24px;
   padding-top: 24px;
 }
 
@@ -300,7 +300,8 @@
   line-height: 1.35;
 }
 
-/* --- Avatar placeholder (belum ada foto asli) --- */
+/* --- Avatar: foto asli kalau ada (lihat $fotoUntuk() di struktur-chart.blade.php),
+   fallback ke ikon placeholder kalau belum ada file fotonya. --- */
 .spkn-struktur__avatar {
   display: grid;
   place-items: center;
@@ -310,6 +311,15 @@
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.18);
   font-size: 28px;
+  overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+}
+
+.spkn-struktur__avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .spkn-struktur__node--wakil .spkn-struktur__avatar {
@@ -322,6 +332,7 @@
   font-size: 20px;
   background: rgba(109, 91, 245, 0.12);
   color: var(--spkn-indigo-500);
+  border-color: rgba(15, 27, 61, 0.1);
 }
 
 .spkn-struktur__avatar--lg {
@@ -331,6 +342,7 @@
   background: var(--spkn-indigo-tint);
   color: var(--spkn-indigo-500);
   margin-bottom: 16px;
+  border-color: rgba(15, 27, 61, 0.1);
 }
 
 /* --- Modal profil ringkas --- */
@@ -490,7 +502,7 @@
 .spkn-struktur__row--wrap {
   flex-wrap: wrap;
   justify-content: center;
-  row-gap: 28px;
+  row-gap: 36px;
 }
 
 .spkn-struktur__row--wrap::before {

@@ -7,6 +7,7 @@ import { initKalenderSpkn } from "./modules/kalender-spkn.js";
 import { initStrukturDownload } from "./modules/struktur-download.js";
 import { initScrollReveal } from "./modules/scroll-reveal.js";
 import { initRincianTugasTabs } from "./modules/rincian-tugas-tabs.js";
+import { initGaleriMomenScroll } from "./modules/galeri-momen-scroll.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   initNavbarDropdown();
@@ -17,6 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initStrukturDownload();
   initScrollReveal();
   initRincianTugasTabs();
+  initGaleriMomenScroll();
   // Modul fitur lain ditambahkan di sini, masing-masing di file terpisah:
   // import { initForumEditor } from "./modules/forum-editor.js";
   // initForumEditor();

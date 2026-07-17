@@ -105,6 +105,25 @@
     // perlu direferensikan JS), supaya aman walau ada nama yang sama persis
     // (mis. "Nyoman Adhi Suryadnyana" muncul di 2 jabatan berbeda di atas).
     $slugNama = fn (string $teks, int $i) => \Illuminate\Support\Str::slug($teks) . '-' . $i;
+
+    // Foto asli pimpinan/anggota (kalau ada). Dicocokkan otomatis dari nama
+    // -> di-slug -> dicari filenya di public/assets/images/struktur/.
+    // Contoh: "Isma Yatun" -> public/assets/images/struktur/isma-yatun.{jpg,jpeg,png,webp}
+    // Sengaja dipisah dari public/assets/images/galeri/ (foto galeri momen di
+    // beranda) dan TIDAK dinamai "pimpinan" biar tidak ketuker sama
+    // public/assets/images/pemimpin.png (foto background hero, beda hal).
+    // Kalau file untuk nama tsb belum ada, avatar tetap fallback ke ikon
+    // placeholder seperti sebelumnya -- tidak perlu ubah kode tiap nambah foto.
+    $fotoUntuk = function (string $nama) {
+        $slug = \Illuminate\Support\Str::slug($nama);
+        foreach (['jpg', 'jpeg', 'png', 'webp'] as $ext) {
+            $rel = "assets/images/struktur/{$slug}.{$ext}";
+            if (file_exists(public_path($rel))) {
+                return asset($rel);
+            }
+        }
+        return null;
+    };
 @endphp
 
 <div class="spkn-struktur__panel">
@@ -164,7 +183,13 @@
                             data-bs-toggle="modal"
                             data-bs-target="#profil-{{ $slugNama($unsur['penanggung_jawab']['nama'], 0) }}"
                         >
-                            <span class="spkn-struktur__avatar"><i class="bi bi-person-fill" aria-hidden="true"></i></span>
+                            <span class="spkn-struktur__avatar">
+                                @if ($foto = $fotoUntuk($unsur['penanggung_jawab']['nama']))
+                                    <img src="{{ $foto }}" alt="Foto {{ $unsur['penanggung_jawab']['nama'] }}" loading="lazy">
+                                @else
+                                    <i class="bi bi-person-fill" aria-hidden="true"></i>
+                                @endif
+                            </span>
                             <span class="spkn-struktur__node-jabatan">{{ $unsur['penanggung_jawab']['jabatan'] }}</span>
                             <span class="spkn-struktur__node-nama">{{ $unsur['penanggung_jawab']['nama'] }}</span>
                             <span class="spkn-struktur__node-hint">Klik untuk lihat profil</span>
@@ -181,7 +206,13 @@
                             data-bs-toggle="modal"
                             data-bs-target="#profil-{{ $slugNama($unsur['wakil_penanggung_jawab']['nama'], 1) }}"
                         >
-                            <span class="spkn-struktur__avatar"><i class="bi bi-person-fill" aria-hidden="true"></i></span>
+                            <span class="spkn-struktur__avatar">
+                                @if ($foto = $fotoUntuk($unsur['wakil_penanggung_jawab']['nama']))
+                                    <img src="{{ $foto }}" alt="Foto {{ $unsur['wakil_penanggung_jawab']['nama'] }}" loading="lazy">
+                                @else
+                                    <i class="bi bi-person-fill" aria-hidden="true"></i>
+                                @endif
+                            </span>
                             <span class="spkn-struktur__node-jabatan">{{ $unsur['wakil_penanggung_jawab']['jabatan'] }}</span>
                             <span class="spkn-struktur__node-nama">{{ $unsur['wakil_penanggung_jawab']['nama'] }}</span>
                             <span class="spkn-struktur__node-hint">Klik untuk lihat profil</span>
@@ -198,7 +229,13 @@
                             data-bs-toggle="modal"
                             data-bs-target="#profil-{{ $slugNama($unsur['ketua']['nama'], 2) }}"
                         >
-                            <span class="spkn-struktur__avatar"><i class="bi bi-person-fill" aria-hidden="true"></i></span>
+                            <span class="spkn-struktur__avatar">
+                                @if ($foto = $fotoUntuk($unsur['ketua']['nama']))
+                                    <img src="{{ $foto }}" alt="Foto {{ $unsur['ketua']['nama'] }}" loading="lazy">
+                                @else
+                                    <i class="bi bi-person-fill" aria-hidden="true"></i>
+                                @endif
+                            </span>
                             <span class="spkn-struktur__node-jabatan">{{ $unsur['ketua']['jabatan'] }}</span>
                             <span class="spkn-struktur__node-nama">{{ $unsur['ketua']['nama'] }}</span>
                             <span class="spkn-struktur__node-hint">Klik untuk lihat profil</span>
@@ -216,7 +253,13 @@
                                 data-bs-toggle="modal"
                                 data-bs-target="#profil-{{ $slugNama($unsur['sekretaris']['nama'], 3) }}"
                             >
-                                <span class="spkn-struktur__avatar spkn-struktur__avatar--sm"><i class="bi bi-person-fill" aria-hidden="true"></i></span>
+                                <span class="spkn-struktur__avatar spkn-struktur__avatar--sm">
+                                    @if ($foto = $fotoUntuk($unsur['sekretaris']['nama']))
+                                        <img src="{{ $foto }}" alt="Foto {{ $unsur['sekretaris']['nama'] }}" loading="lazy">
+                                    @else
+                                        <i class="bi bi-person-fill" aria-hidden="true"></i>
+                                    @endif
+                                </span>
                                 <span class="spkn-struktur__card-jabatan">{{ $unsur['sekretaris']['jabatan'] }}</span>
                                 <span class="spkn-struktur__card-nama">{{ $unsur['sekretaris']['nama'] }}</span>
                             </button>
@@ -236,7 +279,13 @@
                                 data-bs-toggle="modal"
                                 data-bs-target="#profil-{{ $slugNama($a['nama'], $i + 4) }}"
                             >
-                                <span class="spkn-struktur__avatar spkn-struktur__avatar--sm"><i class="bi bi-person-fill" aria-hidden="true"></i></span>
+                                <span class="spkn-struktur__avatar spkn-struktur__avatar--sm">
+                                    @if ($foto = $fotoUntuk($a['nama']))
+                                        <img src="{{ $foto }}" alt="Foto {{ $a['nama'] }}" loading="lazy">
+                                    @else
+                                        <i class="bi bi-person-fill" aria-hidden="true"></i>
+                                    @endif
+                                </span>
                                 <span class="spkn-struktur__card-jabatan">{{ $a['jabatan'] }}</span>
                                 <span class="spkn-struktur__card-nama">{{ $a['nama'] }}</span>
                             </button>
@@ -253,7 +302,13 @@
                             data-bs-toggle="modal"
                             data-bs-target="#profil-{{ $slugNama($unsur['ketua']['nama'], 0) }}"
                         >
-                            <span class="spkn-struktur__avatar"><i class="bi bi-person-fill" aria-hidden="true"></i></span>
+                            <span class="spkn-struktur__avatar">
+                                @if ($foto = $fotoUntuk($unsur['ketua']['nama']))
+                                    <img src="{{ $foto }}" alt="Foto {{ $unsur['ketua']['nama'] }}" loading="lazy">
+                                @else
+                                    <i class="bi bi-person-fill" aria-hidden="true"></i>
+                                @endif
+                            </span>
                             <span class="spkn-struktur__node-jabatan">{{ $unsur['ketua']['jabatan'] }}</span>
                             <span class="spkn-struktur__node-nama">{{ $unsur['ketua']['nama'] }}</span>
                             <span class="spkn-struktur__node-hint">Klik untuk lihat profil</span>
@@ -270,7 +325,13 @@
                             data-bs-toggle="modal"
                             data-bs-target="#profil-{{ $slugNama($unsur['wakil']['nama'], 1) }}"
                         >
-                            <span class="spkn-struktur__avatar"><i class="bi bi-person-fill" aria-hidden="true"></i></span>
+                            <span class="spkn-struktur__avatar">
+                                @if ($foto = $fotoUntuk($unsur['wakil']['nama']))
+                                    <img src="{{ $foto }}" alt="Foto {{ $unsur['wakil']['nama'] }}" loading="lazy">
+                                @else
+                                    <i class="bi bi-person-fill" aria-hidden="true"></i>
+                                @endif
+                            </span>
                             <span class="spkn-struktur__node-jabatan">{{ $unsur['wakil']['jabatan'] }}</span>
                             <span class="spkn-struktur__node-nama">{{ $unsur['wakil']['nama'] }}</span>
                             <span class="spkn-struktur__node-hint">Klik untuk lihat profil</span>
@@ -290,7 +351,13 @@
                                 data-bs-toggle="modal"
                                 data-bs-target="#profil-{{ $slugNama($a['nama'], $i + 2) }}"
                             >
-                                <span class="spkn-struktur__avatar spkn-struktur__avatar--sm"><i class="bi bi-person-fill" aria-hidden="true"></i></span>
+                                <span class="spkn-struktur__avatar spkn-struktur__avatar--sm">
+                                    @if ($foto = $fotoUntuk($a['nama']))
+                                        <img src="{{ $foto }}" alt="Foto {{ $a['nama'] }}" loading="lazy">
+                                    @else
+                                        <i class="bi bi-person-fill" aria-hidden="true"></i>
+                                    @endif
+                                </span>
                                 <span class="spkn-struktur__card-jabatan">{{ $a['jabatan'] }}</span>
                                 <span class="spkn-struktur__card-nama">{{ $a['nama'] }}</span>
                             </button>
@@ -322,7 +389,11 @@
                         </div>
                         <div class="modal-body text-center pt-0">
                             <span class="spkn-struktur__avatar spkn-struktur__avatar--lg mx-auto">
-                                <i class="bi bi-person-fill" aria-hidden="true"></i>
+                                @if ($foto = $fotoUntuk($orang['nama']))
+                                    <img src="{{ $foto }}" alt="Foto {{ $orang['nama'] }}" loading="lazy">
+                                @else
+                                    <i class="bi bi-person-fill" aria-hidden="true"></i>
+                                @endif
                             </span>
                             <span class="spkn-struktur__tag">{{ $orang['jabatan'] }}</span>
                             <h4 class="spkn-struktur__modal-nama">{{ $orang['nama'] }}</h4>

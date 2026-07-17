@@ -1,0 +1,449 @@
+/**
+ * Section "Galeri Momen" (beranda, di bawah .spkn-unsur).
+ * Baris foto yang bergerak terus horizontal (marquee), loop tanpa putus.
+ *
+ * Cara kerja loop mulus: track berisi 2x daftar foto yang sama
+ * (lihat @for di galeri-momen.blade.php). Track digeser dari translateX(0)
+ * ke translateX(-50%) -- karena isinya dobel, pas sampai -50% posisinya
+ * identik dengan awal, jadi waktu animasi diulang dari 0% tidak kelihatan
+ * "patah"/loncat.
+ */
+
+/* --- Efek "liquid glass": gradient gold transparan yang blur & pelan
+   bergeser posisinya, dipakai bareng oleh pill jabatan, banner nama modal,
+   & tombol LHKPN supaya konsisten satu bahasa visual. --- */
+@keyframes spknGlassFlow {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spkn-galeri__caption-jabatan,
+  .spkn-profil__banner,
+  .spkn-profil__lhkpn {
+    animation: none;
+  }
+}
+
+.spkn-galeri {
+  background: var(--spkn-navy-950);
+  padding: 80px 0;
+  overflow: hidden;
+}
+
+.spkn-galeri__head {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 20px;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.spkn-galeri__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font-family: ui-monospace, SFMono-Regular, "JetBrains Mono", Menlo, monospace;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.spkn-galeri__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(24px, 2.6vw, 32px);
+  color: #fff;
+  margin: 0;
+}
+
+/* --- Viewport: bingkai yang memotong track & memudarkan tepi kiri/kanan --- */
+
+.spkn-galeri__viewport {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  cursor: grab;
+  scrollbar-width: none; /* scrollbar asli disembunyikan, geser tetap jalan lewat drag/touch/wheel */
+  -webkit-overflow-scrolling: touch;
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent 0,
+    #000 6%,
+    #000 94%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    90deg,
+    transparent 0,
+    #000 6%,
+    #000 94%,
+    transparent 100%
+  );
+}
+
+.spkn-galeri__viewport::-webkit-scrollbar {
+  display: none;
+}
+
+.spkn-galeri__viewport.is-dragging {
+  cursor: grabbing;
+  scroll-behavior: auto; /* nonaktifkan smooth-scroll pas drag biar tidak lag ikut mouse */
+}
+
+/* --- Track: baris foto. Posisinya digeser via JS (scrollLeft asli, bukan
+   transform) supaya BISA discroll manual (drag mouse/trackpad/touch/wheel)
+   sekaligus tetap auto-geser pelan waktu idle -- lihat
+   resources/js/modules/galeri-momen-scroll.js --- */
+
+.spkn-galeri__track {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  width: max-content;
+  user-select: none; /* cegah teks/gambar ke-select pas drag */
+}
+
+.spkn-galeri__card {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Tombol pembungkus figure+figcaption utk kartu yang punya 'nama' (bisa
+   diklik -> buka modal profil). Reset tampilan <button> supaya kelihatan
+   sama persis seperti kartu polos sebelumnya, cuma nambah cursor+hover. */
+.spkn-galeri__trigger {
+  all: unset;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.spkn-galeri__trigger:hover .spkn-galeri__item,
+.spkn-galeri__trigger:focus-visible .spkn-galeri__item {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.spkn-galeri__trigger:focus-visible {
+  outline: 2px solid transparent;
+  outline-offset: 4px;
+}
+
+.spkn-galeri__item {
+  width: 260px;
+  aspect-ratio: 3 / 4;
+  margin: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #11183a;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+.spkn-galeri__item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+.spkn-galeri__placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: linear-gradient(160deg, #1a2350 0%, #11183a 100%);
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.spkn-galeri__placeholder i {
+  font-size: 28px;
+}
+
+.spkn-galeri__placeholder span {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* --- Keterangan di bawah foto (opsional): pill jabatan + nama --- */
+
+.spkn-galeri__caption {
+  width: 260px;
+  margin-top: 18px;
+  text-align: center;
+}
+
+.spkn-galeri__caption-jabatan {
+  display: inline-block;
+  padding: 7px 18px;
+  border-radius: var(--radius-pill);
+  background: linear-gradient(120deg, rgba(224, 178, 60, 0.28), rgba(255, 224, 150, 0.12) 45%, rgba(224, 178, 60, 0.24));
+  background-size: 220% 220%;
+  animation: spknGlassFlow 6s ease-in-out infinite;
+  backdrop-filter: blur(14px) saturate(160%);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  border: 1px solid rgba(255, 224, 150, 0.4);
+  color: var(--spkn-gold-400);
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 12.5px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  box-shadow: 0 4px 18px rgba(224, 178, 60, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  margin-bottom: 14px;
+}
+
+.spkn-galeri__caption-nama {
+  display: block;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 1.4;
+  color: #fff;
+}
+
+@media (max-width: 767.98px) {
+  .spkn-galeri { padding: 56px 0; }
+
+  .spkn-galeri__item { width: 170px; }
+
+  .spkn-galeri__caption {
+    width: 170px;
+    margin-top: 14px;
+  }
+
+  .spkn-galeri__caption-jabatan {
+    padding: 5px 12px;
+    font-size: 11px;
+    margin-bottom: 10px;
+  }
+
+  .spkn-galeri__caption-nama {
+    font-size: 13.5px;
+  }
+
+  .spkn-galeri__track {
+    gap: 16px;
+  }
+}
+
+/* --- Modal "Profil" yang muncul waktu kartu bernama diklik --- */
+
+.spkn-profil__modal {
+  border-radius: var(--radius-lg);
+  border: none;
+  overflow: hidden;
+}
+
+.spkn-profil__modal-head {
+  border-bottom: 1px solid rgba(15, 27, 61, 0.08);
+  padding: 18px 24px;
+}
+
+.spkn-profil__modal-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 19px;
+  color: var(--spkn-navy-800);
+  margin: 0;
+}
+
+.spkn-profil__modal-body {
+  padding: 24px;
+}
+
+.spkn-profil__photo {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 20px;
+  background: #e7e7ef;
+}
+
+.spkn-profil__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.spkn-profil__photo-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(15, 27, 61, 0.25);
+  font-size: 48px;
+}
+
+.spkn-profil__banner {
+  background: linear-gradient(120deg, rgba(224, 178, 60, 0.3), rgba(255, 224, 150, 0.14) 45%, rgba(224, 178, 60, 0.26));
+  background-size: 220% 220%;
+  animation: spknGlassFlow 6s ease-in-out infinite;
+  backdrop-filter: blur(14px) saturate(160%);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  border: 1px solid rgba(224, 178, 60, 0.35);
+  color: var(--spkn-navy-800);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 18px;
+  padding: 14px 20px;
+  border-radius: 10px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  margin-bottom: 20px;
+}
+
+.spkn-profil__facts {
+  list-style: none;
+  margin: 0 0 24px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.spkn-profil__facts li {
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: var(--spkn-ink-muted);
+  padding-left: 18px;
+  position: relative;
+}
+
+.spkn-profil__facts li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 9px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--spkn-ink-muted);
+}
+
+.spkn-profil__facts strong {
+  color: var(--spkn-navy-800);
+  font-weight: 700;
+}
+
+/* --- Akordeon riwayat: 3 baris, masing-masing nuansa warna beda --- */
+
+.spkn-profil__accordion {
+  margin-bottom: 24px;
+}
+
+.spkn-profil__accordion-item {
+  border: 1px solid rgba(15, 27, 61, 0.08);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.spkn-profil__accordion-item--yellow { background: #fbf3d9; }
+.spkn-profil__accordion-item--green  { background: #e9f2df; }
+.spkn-profil__accordion-item--peach  { background: #f3e7e0; }
+.spkn-profil__accordion-item--blue   { background: #e4ebf5; }
+
+.spkn-profil__accordion-btn,
+.spkn-profil__accordion-btn:not(.collapsed) {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 18px;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 13.5px;
+  letter-spacing: .03em;
+  color: var(--spkn-navy-800);
+  text-align: left;
+  cursor: pointer;
+}
+
+.spkn-profil__accordion-btn::after {
+  display: none;
+}
+
+.spkn-profil__accordion-btn .bi {
+  margin-left: auto;
+  font-size: 12px;
+  transition: transform .2s ease;
+}
+
+.spkn-profil__accordion-btn:not(.collapsed) .bi {
+  transform: rotate(180deg);
+}
+
+.spkn-profil__accordion-body {
+  padding: 4px 18px 18px;
+}
+
+.spkn-profil__accordion-body ul {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.spkn-profil__accordion-body li {
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--spkn-navy-800);
+}
+
+.spkn-profil__empty-note {
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--spkn-ink-muted);
+  margin: 0;
+}
+
+.spkn-profil__lhkpn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 14px;
+  border-radius: 10px;
+  background: linear-gradient(120deg, rgba(224, 178, 60, 0.3), rgba(255, 224, 150, 0.14) 45%, rgba(224, 178, 60, 0.26));
+  background-size: 220% 220%;
+  animation: spknGlassFlow 6s ease-in-out infinite;
+  backdrop-filter: blur(14px) saturate(160%);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  border: 1px solid rgba(224, 178, 60, 0.35);
+  color: var(--spkn-navy-800);
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: .04em;
+  text-decoration: none;
+  box-shadow: 0 4px 18px rgba(224, 178, 60, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.spkn-profil__lhkpn:hover {
+  color: var(--spkn-navy-800);
+  filter: brightness(0.97);
+}
