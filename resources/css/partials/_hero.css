@@ -168,3 +168,23 @@
   .spkn-stats { width: 100%; grid-template-columns: 1fr; }
   .spkn-stats__item:nth-child(3) { grid-column: auto; }
 }
+
+/* Laptop: tampilkan seluruh foto grup, jangan crop kiri/kanan */
+@media (min-width: 1024px) and (max-width: 1600px) {
+    .hero {
+        background-size: 100% auto;
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-color: #111827;
+    }
+}
+
+/* Laptop resolusi tinggi: jangan crop foto sisi kiri dan kanan */
+@media (min-width: 1920px) and (max-width: 2200px) {
+    .hero {
+        background-size: contain !important;
+        background-position: center center !important;
+        background-repeat: no-repeat;
+        background-color: #111827;
+    }
+}

@@ -1,0 +1,11 @@
+/* Perbaikan foto hero untuk laptop resolusi tinggi */
+
+@media (min-width: 1900px) and (max-width: 2200px) {
+    .hero,
+    .hero::before {
+        background-size: contain !important;
+        background-position: center center !important;
+        background-repeat: no-repeat !important;
+        background-color: #111827 !important;
+    }
+}

@@ -21,3 +21,16 @@
 @import "./partials/_rincian-tugas.css";
 @import "./partials/_arsip-keputusan.css";
 @import "./partials/_footer.css";
+@import './hero-laptop-fix.css';
+
+/* Sembunyikan scrollbar, halaman tetap bisa di-scroll */
+html,
+body {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+    display: none;
+}
