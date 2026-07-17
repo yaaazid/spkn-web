@@ -4,14 +4,13 @@
 
 .spkn-hero {
   position: relative;
-  min-height: 100vh; /* full 1 layar penuh — foto baru rasionya 2560x1156 (≈2.2:1),
-                        cukup dekat ke rasio layar biasa jadi aman dipakai penuh 100vh */
+  min-height: 100vh;
   display: flex;
-  flex-direction: column; /* navbar di atas, hero__inner di bawah — bukan sejajar ke samping */
+  flex-direction: column;
   padding: 24px 20px 64px;
   background-size: cover;
-  background-position: center; /* rasio foto baru lebih dekat ke rasio layar, tidak perlu bias vertikal lagi */
-  background-color: #3f444c; /* senada warna abu latar foto, jaga-jaga kalau ada sisi yang belum ke-cover */
+  background-position: center;
+  background-color: #3f444c;
   isolation: isolate;
 }
 
@@ -29,11 +28,9 @@
 }
 
 .spkn-hero__inner {
-  max-width: 1440px; /* lebih lebar, pas buat rasio laptop biasa */
   width: 100%;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: auto; /* dorong ke bawah kolom, navbar tetap nempel di atas */
+  max-width: 1440px;
+  margin: auto auto 0;
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
@@ -45,12 +42,12 @@
 }
 
 .spkn-hero__title {
+  margin: 0 0 18px;
   font-family: var(--font-display);
   font-weight: 700;
   font-size: clamp(32px, 4.5vw, 48px);
   line-height: 1.15;
   color: #fff;
-  margin: 0 0 18px;
 }
 
 .spkn-hero__title em {
@@ -59,17 +56,17 @@
 }
 
 .spkn-hero__subtitle {
+  max-width: 480px;
+  margin: 0 0 28px;
   font-family: var(--font-body);
   font-size: 16px;
   color: rgba(255, 255, 255, 0.85);
-  margin: 0 0 28px;
-  max-width: 480px;
 }
 
 .spkn-hero__cta {
   display: flex;
-  gap: 12px;
   flex-wrap: wrap;
+  gap: 12px;
 }
 
 .spkn-btn-primary,
@@ -83,13 +80,17 @@
   font-weight: 600;
   font-size: 14.5px;
   text-decoration: none;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease,
-    border-color 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease,
+    background 0.2s ease, border-color 0.2s ease;
 }
 
 .spkn-btn-primary {
-  background: linear-gradient(135deg, var(--spkn-gold-600), var(--spkn-gold-300));
   color: #fff;
+  background: linear-gradient(
+    135deg,
+    var(--spkn-gold-600),
+    var(--spkn-gold-300)
+  );
   box-shadow: 0 8px 22px rgba(166, 121, 10, 0.4);
 }
 
@@ -104,29 +105,80 @@
   box-shadow: 0 6px 16px rgba(166, 121, 10, 0.4);
 }
 
+/* Tombol kanan: warm liquid glass dari navbar */
 .spkn-btn-outline-glass {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+  isolation: isolate;
+  color: var(--spkn-ink);
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 224, 226, 0.50) 0%,
+    rgba(231, 214, 193, 0.34) 42%,
+    rgba(191, 205, 245, 0.38) 100%
+  );
+  box-shadow:
+    0 12px 32px rgba(15, 27, 61, 0.25),
+    0 2px 8px rgba(15, 27, 61, 0.12),
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.86),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.30);
+  backdrop-filter: blur(24px) saturate(190%) brightness(1.08);
+  -webkit-backdrop-filter: blur(24px) saturate(190%) brightness(1.08);
+}
+
+.spkn-btn-outline-glass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    118deg,
+    rgba(247, 201, 72, 0.20) 0%,
+    rgba(255, 230, 232, 0.14) 38%,
+    rgba(144, 177, 245, 0.18) 68%,
+    rgba(247, 201, 72, 0.10) 100%
+  );
+}
+
+.spkn-btn-outline-glass::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 12%;
+  right: 12%;
+  z-index: -1;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.80) 30%,
+    rgba(255, 230, 150, 0.65) 50%,
+    rgba(180, 200, 255, 0.65) 70%,
+    transparent
+  );
 }
 
 .spkn-btn-outline-glass:hover,
 .spkn-btn-outline-glass:focus-visible {
-  background: rgba(255, 255, 255, 0.22);
-  border-color: #fff;
+  border-color: rgba(255, 255, 255, 0.96);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 233, 235, 0.64),
+    rgba(204, 217, 255, 0.52)
+  );
+  box-shadow:
+    0 16px 38px rgba(15, 27, 61, 0.32),
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.38);
   transform: translateY(-2px);
 }
 
 .spkn-btn-outline-glass:active {
-  background: rgba(255, 255, 255, 0.16);
   transform: translateY(0);
 }
 
-/* --- 3 kotak statistik: 2 di atas berdampingan, 1 di bawah full-width ---
-   Kotak atas: 160x80 (rasio 2:1). Kotak bawah: melebar 2 kolom (334px)
-   tapi TINGGI TETAP SAMA (80px) — tidak ikut membesar seperti aspect-ratio. */
 .spkn-stats {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -135,15 +187,13 @@
 }
 
 .spkn-stats__item {
-  height: 80px; /* tinggi tetap untuk semua kotak, termasuk yang di baris ke-2 */
   display: flex;
   flex-direction: column;
   justify-content: center;
+  height: 80px;
   padding: 16px 20px;
 }
 
-/* Kotak ke-3 (7/8) turun ke baris kedua dan melebar penuh 2 kolom,
-   tanpa ikut menambah tinggi */
 .spkn-stats__item:nth-child(3) {
   grid-column: 1 / -1;
 }
@@ -157,34 +207,33 @@
 }
 
 .spkn-stats__label {
+  margin-top: 4px;
   font-family: var(--font-body);
   font-size: 13px;
   color: rgba(255, 255, 255, 0.75);
-  margin-top: 4px;
+}
+
+@media (min-width: 1024px) and (max-width: 2200px) {
+  .spkn-hero {
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #111827;
+  }
 }
 
 @media (max-width: 991.98px) {
-  .spkn-hero__inner { flex-direction: column; align-items: flex-start; }
-  .spkn-stats { width: 100%; grid-template-columns: 1fr; }
-  .spkn-stats__item:nth-child(3) { grid-column: auto; }
-}
+  .spkn-hero__inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 
-/* Laptop: tampilkan seluruh foto grup, jangan crop kiri/kanan */
-@media (min-width: 1024px) and (max-width: 1600px) {
-    .hero {
-        background-size: 100% auto;
-        background-position: center center;
-        background-repeat: no-repeat;
-        background-color: #111827;
-    }
-}
+  .spkn-stats {
+    width: 100%;
+    grid-template-columns: 1fr;
+  }
 
-/* Laptop resolusi tinggi: jangan crop foto sisi kiri dan kanan */
-@media (min-width: 1920px) and (max-width: 2200px) {
-    .hero {
-        background-size: contain !important;
-        background-position: center center !important;
-        background-repeat: no-repeat;
-        background-color: #111827;
-    }
+  .spkn-stats__item:nth-child(3) {
+    grid-column: auto;
+  }
 }
