@@ -644,3 +644,62 @@
     transparent
   ) !important;
 }
+
+/* Halaman tanpa hero / background putih: navbar transparan */
+.spkn-navbar-wrap.no-hero .spkn-navbar__chrome {
+  background: rgba(255, 255, 255, 0.035) !important;
+  border-color: rgba(15, 27, 61, 0.12) !important;
+  box-shadow:
+    0 8px 24px rgba(15, 27, 61, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.58) !important;
+  backdrop-filter: blur(14px) saturate(125%) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(125%) !important;
+}
+
+.spkn-navbar-wrap.no-hero .spkn-navbar__chrome::before {
+  background: radial-gradient(
+    circle at 18% 0%,
+    rgba(255, 255, 255, 0.36),
+    transparent 55%
+  ) !important;
+}
+
+.spkn-navbar-wrap.no-hero .spkn-navbar__chrome::after {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(15, 27, 61, 0.10) 45%,
+    transparent
+  ) !important;
+}
+
+/* Landing / hero: navy transparan liquid glass */
+.spkn-navbar__chrome {
+  background: rgba(18, 33, 78, 0.16) !important;
+  border-color: rgba(180, 205, 255, 0.22) !important;
+  box-shadow:
+    0 8px 24px rgba(5, 11, 34, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 -10px 20px rgba(5, 10, 35, 0.08) !important;
+  backdrop-filter: blur(14px) saturate(145%) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(145%) !important;
+}
+
+.spkn-navbar__chrome::before {
+  background: radial-gradient(
+    circle at 18% 0%,
+    rgba(255, 255, 255, 0.15) 0%,
+    rgba(180, 205, 255, 0.05) 28%,
+    transparent 58%
+  ) !important;
+}
+
+.spkn-navbar__chrome::after {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.22) 35%,
+    rgba(190, 210, 255, 0.18) 60%,
+    transparent
+  ) !important;
+}
