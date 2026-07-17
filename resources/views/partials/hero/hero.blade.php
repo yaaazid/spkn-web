@@ -1,5 +1,6 @@
 <header
     class="spkn-hero"
+    data-navbar-theme="dark"
     style="background-image: url('{{ asset('assets/images/pemimpin.png') }}');"
 >
     <div class="spkn-hero__inner">

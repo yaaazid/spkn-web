@@ -28,6 +28,27 @@ export function initNavbarScroll(root = document) {
 
   if (!wrap || !navRoot) return;
 
+  // --- Section gelap (mis. galeri momen navy, footer emas-tua) ---
+  // .is-scrolled/.no-hero SELALU asumsikan section di belakang navbar itu
+  // TERANG begitu di-scroll (makanya teks jadi gelap) -- asumsi itu salah
+  // kalau ternyata yang lewat di belakang pill navbar itu section gelap.
+  // Jadi dicek terpisah: section mana pun yang ditandai
+  // data-navbar-theme="dark" di blade-nya, begitu titik tengah pill navbar
+  // "masuk" ke area section itu, class .on-dark ditambah supaya teks &
+  // kaca navbar otomatis balik terang -- lihat aturan .on-dark di
+  // _navbar.css.
+  const darkSections = Array.from(root.querySelectorAll('[data-navbar-theme="dark"]'));
+
+  const updateThemeState = () => {
+    if (!darkSections.length) return;
+    const probeY = wrap.getBoundingClientRect().bottom - 8; // kira-kira tengah pill
+    const isOverDark = darkSections.some((section) => {
+      const rect = section.getBoundingClientRect();
+      return rect.top <= probeY && rect.bottom >= probeY;
+    });
+    wrap.classList.toggle("on-dark", isOverDark);
+  };
+
   const setMenuIcon = (isOpen) => {
     menuToggleIcon?.classList.toggle("bi-list", !isOpen);
     menuToggleIcon?.classList.toggle("bi-x-lg", isOpen);
@@ -54,9 +75,12 @@ export function initNavbarScroll(root = document) {
     // Balik ke atas (bukan mode ramping lagi di desktop) -> tutup off-canvas
     // kalau kebetulan lagi kebuka, biar tidak nyangkut.
     if (!isScrolled) closeMenuPanel();
+
+    updateThemeState();
   };
 
   window.addEventListener("scroll", updateScrollState, { passive: true });
+  window.addEventListener("resize", updateThemeState);
   updateScrollState(); // set state awal, mis. kalau halaman di-refresh sambil sudah discroll
 
   menuToggle?.addEventListener("click", (event) => {

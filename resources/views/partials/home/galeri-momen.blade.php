@@ -114,7 +114,7 @@
     $galeriDir = 'assets/images/galeri/';
 @endphp
 
-<section class="spkn-galeri">
+<section class="spkn-galeri" data-navbar-theme="dark">
     <div class="spkn-galeri__head">
         <span class="spkn-galeri__badge reveal">
             <i class="bi bi-people-fill" aria-hidden="true"></i>

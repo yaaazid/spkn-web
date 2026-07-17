@@ -703,3 +703,64 @@
     transparent
   ) !important;
 }
+
+/* ─── State: navbar sedang di atas section GELAP ─────────────────────────
+   Ditoggle otomatis oleh navbar-scroll.js begitu pill navbar "menimpa"
+   elemen ber-atribut [data-navbar-theme="dark"] (mis. .spkn-galeri,
+   <footer>) -- dipisah dari .is-scrolled/.no-hero karena section gelap
+   bisa muncul di TENGAH halaman yang sebagian besar terang, bukan cuma
+   pas landing. Ditulis PALING BAWAH file supaya menang cascade lawan
+   aturan !important punya .is-scrolled/.no-hero/.spkn-navbar__chrome di
+   atas (source order jadi penentu kalau specificity-nya sama). */
+
+.spkn-navbar-wrap.on-dark .spkn-navbar__chrome {
+  background: linear-gradient(
+    135deg,
+    rgba(29, 47, 101, 0.75) 0%,
+    rgba(20, 34, 76, 0.65) 48%,
+    rgba(31, 48, 96, 0.72) 100%
+  ) !important;
+  border-color: rgba(255, 255, 255, 0.24) !important;
+  box-shadow:
+    0 12px 32px rgba(5, 11, 34, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.24),
+    inset 0 -10px 20px rgba(5, 10, 35, 0.22) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+}
+
+.spkn-navbar-wrap.on-dark .spkn-navbar__chrome::before {
+  background: radial-gradient(
+    circle at 18% 0%,
+    rgba(255, 255, 255, 0.18) 0%,
+    rgba(180, 205, 255, 0.08) 26%,
+    transparent 58%
+  ) !important;
+}
+
+.spkn-navbar-wrap.on-dark .spkn-navbar__chrome::after {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.30) 32%,
+    rgba(190, 210, 255, 0.30) 58%,
+    transparent
+  ) !important;
+}
+
+.spkn-navbar-wrap.on-dark .spkn-brand,
+.spkn-navbar-wrap.on-dark .spkn-nav-link,
+.spkn-navbar-wrap.on-dark .spkn-icon-btn,
+.spkn-navbar-wrap.on-dark .spkn-menu-toggle {
+  color: #fff !important;
+}
+
+.spkn-navbar-wrap.on-dark .spkn-icon-btn {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border-color: rgba(255, 255, 255, 0.40) !important;
+}
+
+.spkn-navbar-wrap.on-dark .spkn-nav-link:hover,
+.spkn-navbar-wrap.on-dark .spkn-menu-toggle:hover {
+  background: rgba(255, 255, 255, 0.15) !important;
+}

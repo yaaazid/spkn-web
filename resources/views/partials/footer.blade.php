@@ -41,7 +41,7 @@
     ];
 @endphp
 
-<footer class="spkn-footer {{ $isHome ? '' : 'spkn-footer--compact' }}">
+<footer class="spkn-footer {{ $isHome ? '' : 'spkn-footer--compact' }}" data-navbar-theme="dark">
     <div class="spkn-footer__inner">
         @if ($isHome)
             <span class="spkn-footer__badge">Hubungi Kami</span>
